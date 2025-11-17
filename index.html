@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aena - Información para Pasajeros</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-main">
+            <div class="container">
+                <div class="header-content">
+                    <!-- Left Side -->
+                    <div class="header-left">
+                        <div class="logo-container">
+                            <img src="images/Aena_Logo_New.svg.png" alt="Aena Logo" class="logo-img">
+                            <span class="logo-text">aena</span>
+                        </div>
+                        <div class="header-tagline">
+                            <span>aeropuertos <span class="underline-green">para ti</span> <span class="airplane-icon">✈</span></span>
+                        </div>
+                        <div class="header-separator"></div>
+                        <div class="header-section active">pasajeros</div>
+                    </div>
+                    
+                    <!-- Middle Section -->
+                    <div class="header-middle">
+                        <button class="menu-toggle" id="mobileMenuToggle">☰</button>
+                        <a href="#" class="header-icon-link">
+                            <span class="icon-card">💳</span>
+                            <span>AENA CLUB</span>
+                        </a>
+                        <a href="#" class="header-icon-link">
+                            <span class="icon-bag">🛍</span>
+                            <span>AENA MARKET</span>
+                        </a>
+                    </div>
+                    
+                    <!-- Right Side -->
+                    <div class="header-right">
+                        <a href="#" class="btn-parking">
+                            <span class="icon-car">🚗</span>
+                            <span>RESERVA EL PARKING de tu aeropuerto</span>
+                        </a>
+                        <a href="#" class="btn-flight">
+                            <span class="icon-plane">✈</span>
+                            <span>BUSCAR VUELO</span>
+                        </a>
+                        <div class="language-selector">
+                            <span>ES</span>
+                            <span class="arrow-down">▼</span>
+                        </div>
+                        <button class="search-icon">🔍</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Secondary Navigation -->
+        <nav class="secondary-nav">
+            <div class="container">
+                <ul class="secondary-nav-menu">
+                    <li><a href="#" class="secondary-nav-link">Viajeros</a></li>
+                    <li><a href="#" class="secondary-nav-link">Equipajes y controles</a></li>
+                    <li><a href="#" class="secondary-nav-link">Documentación y visados</a></li>
+                    <li><a href="#" class="secondary-nav-link">Servicios VIP</a></li>
+                    <li><a href="#" class="secondary-nav-link">Tiendas y restaurantes</a></li>
+                    <li><a href="#" class="secondary-nav-link">Nuestros aeropuertos</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-background"></div>
+        <div class="hero-content">
+            <div class="container">
+                <div class="hero-text">
+                    <h1 class="hero-title">Aena</h1>
+                    <p class="hero-subtitle">Disfruta de tu viaje antes de que empiece</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Floating Sala de Espera Button -->
+    <button class="floating-btn-sala-espera" id="floatingSalaEspera">
+        <span class="floating-btn-icon">🪑</span>
+        <span class="floating-btn-text">Sala de Espera</span>
+    </button>
+
+    <!-- Modal de Reservación de Asientos -->
+    <div class="modal-overlay" id="reservationModal">
+        <div class="modal-container">
+            <div class="modal-header">
+                <div class="modal-title-container">
+                    <span class="modal-icon">📋</span>
+                    <h2 class="modal-title">Reservación de Asientos</h2>
+                </div>
+                <button class="modal-close" id="closeModal">×</button>
+            </div>
+            <div class="modal-body">
+                <p class="modal-description">Completa el formulario para generar tu turno de videollamada y reservar tu asiento.</p>
+                <form id="reservationForm" class="reservation-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="nombre">Nombre</label>
+                            <input type="text" id="nombre" name="nombre" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="apellido">Apellido</label>
+                            <input type="text" id="apellido" name="apellido" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="dni">DNI</label>
+                            <input type="text" id="dni" name="dni" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="telefono">Teléfono</label>
+                            <input type="tel" id="telefono" name="telefono" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="vuelo">Número de Vuelo (opcional)</label>
+                        <input type="text" id="vuelo" name="vuelo" class="form-control">
+                    </div>
+                    <div class="modal-info">
+                        <p>Al continuar, te asignaremos un turno y verás una sala de espera. Cuando el agente esté listo, podrás iniciar una videollamada.</p>
+                    </div>
+                    <div class="modal-actions">
+                        <button type="button" class="btn btn-secondary" id="cancelReservation">Cancelar</button>
+                        <button type="submit" class="btn btn-primary" id="generateTurn">
+                            <span class="btn-check">✓</span>
+                            Generar turno
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sala de Espera / Waiting Room -->
+    <div class="modal-overlay" id="waitingRoomModal">
+        <div class="modal-container waiting-room-container">
+            <div class="waiting-room-content">
+                <div class="waiting-icon">⏳</div>
+                <h2 class="waiting-title">Sala de Espera</h2>
+                <p class="waiting-message">Tu turno ha sido generado. Esperando a que un agente esté disponible...</p>
+                <div class="waiting-loader">
+                    <div class="loader"></div>
+                </div>
+                <p class="waiting-info">Cuando el agente esté listo, se iniciará automáticamente la videollamada.</p>
+                <div class="turn-info" id="turnInfo"></div>
+                <button class="btn btn-secondary" id="cancelWaiting">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Airport Selector -->
+    <section class="airport-selector">
+        <div class="container">
+            <h2 class="section-title">Elige tu aeropuerto</h2>
+            <div class="airport-search">
+                <input type="text" id="airportSearch" placeholder="Buscar aeropuerto..." class="search-input">
+            </div>
+            <div class="airport-grid" id="airportGrid">
+                <!-- Los aeropuertos se cargarán dinámicamente desde la API -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Parking Reservation -->
+    <section class="parking-section">
+        <div class="container">
+            <h2 class="section-title">Parking de Aena | Haz tu reserva</h2>
+            <div class="parking-form">
+                <div class="form-group">
+                    <label for="terminalSelect">Selecciona la terminal</label>
+                    <select id="terminalSelect" class="form-control">
+                        <option value="">Selecciona...</option>
+                    </select>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="entryDate">Fecha de entrada</label>
+                        <input type="date" id="entryDate" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="entryTime">Hora de entrada</label>
+                        <input type="time" id="entryTime" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="exitDate">Fecha de salida</label>
+                        <input type="date" id="exitDate" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="exitTime">Hora de salida</label>
+                        <input type="time" id="exitTime" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="promoCode">Código promocional (opcional)</label>
+                    <input type="text" id="promoCode" class="form-control" placeholder="Ingresa tu código">
+                </div>
+                <button class="btn btn-primary" id="searchParking">Buscar parking</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Information Cards -->
+    <section class="info-section">
+        <div class="container">
+            <h2 class="section-title">Información de interés</h2>
+            <p class="section-subtitle">En Aena queremos asegurar la mejor experiencia para nuestros pasajeros.</p>
+            <div class="info-cards" id="infoCards">
+                <!-- Las tarjetas se cargarán dinámicamente desde la API -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Flight Search -->
+    <section class="flight-section">
+        <div class="container">
+            <h2 class="section-title">Buscar vuelo</h2>
+            <div class="flight-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="originAirport">Aeropuerto de origen</label>
+                        <select id="originAirport" class="form-control">
+                            <option value="">Selecciona...</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="destinationAirport">Aeropuerto de destino</label>
+                        <select id="destinationAirport" class="form-control">
+                            <option value="">Selecciona...</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="flightDate">Fecha</label>
+                        <input type="date" id="flightDate" class="form-control">
+                    </div>
+                </div>
+                <button class="btn btn-primary" id="searchFlight">Buscar vuelos</button>
+            </div>
+            <div class="flight-results" id="flightResults">
+                <!-- Los resultados se mostrarán aquí -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>VIAJEROS</h4>
+                    <ul>
+                        <li><a href="#">Personas con necesidades especiales</a></li>
+                        <li><a href="#">Servicios de Aena pensados para ti</a></li>
+                        <li><a href="#">Viajar con animales</a></li>
+                        <li><a href="#">Brexit</a></li>
+                        <li><a href="#">Alertas sanitarias</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>EQUIPAJES Y CONTROLES</h4>
+                    <ul>
+                        <li><a href="#">Prepara tu equipaje</a></li>
+                        <li><a href="#">Equipaje de mano</a></li>
+                        <li><a href="#">Incidencias con equipajes</a></li>
+                        <li><a href="#">Objetos perdidos</a></li>
+                        <li><a href="#">Control de seguridad</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>DOCUMENTACIÓN Y VISADOS</h4>
+                    <ul>
+                        <li><a href="#">Documentación para viajar</a></li>
+                        <li><a href="#">Inmigración y visados</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>SERVICIOS VIP</h4>
+                    <ul>
+                        <li><a href="#">Salas VIP</a></li>
+                        <li><a href="#">Meet & Assist</a></li>
+                        <li><a href="#">Fast Lane</a></li>
+                        <li><a href="#">Fast Track</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>Servicio de información a pasajeros (+34) 91 321 1000</p>
+                <p>Copyright © 2025 Aena</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="services/api.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
+
