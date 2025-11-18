@@ -193,6 +193,13 @@
             const API_URL   = 'https://mobile.euro.debmedia.com/api/v1/queue/:queueId/branch/:branchId/enqueue';
             const API_TOKEN = 'l13h4QS8h7ILVDAOduVpAwghCuG6LM5grbHRD9Nb';
 
+            // 🔹 Construye la URL real usando queueId y branchId
+            function buildApiUrl(queueId, branchId) {
+                return API_URL
+                    .replace(':queueId', queueId)
+                    .replace(':branchId', branchId);
+            }
+
             // Translations
             const translations = {
                 es: {
@@ -352,9 +359,19 @@
                 return null;
             }
 
-            async function createTurn(payload) {
+            // 🔹 Mapear sucursal -> queueId
+            function mapSucursalToQueueId(value) {
+                if (value === 'barajas-t1')  return 819; // T1
+                if (value === 'neptuno-t4s') return 715; // T4S
+                return null;
+            }
+
+            async function createTurn(payload, queueId, branchId) {
                 console.log('Enviando payload a Debmedia:', payload);
-                const res = await fetch(API_URL, {
+
+                const url = buildApiUrl(queueId, branchId);
+
+                const res = await fetch(url, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -435,10 +452,8 @@
                         return;
                     }
 
-                    // Determinar queueId según la terminal
-                    const queueId = sucursalVal === 'barajas-t1' ? 819 : 
-                                   sucursalVal === 'neptuno-t4s' ? 715 : null;
-                    
+                    // Determinar queueId según la terminal seleccionada
+                    const queueId = mapSucursalToQueueId(sucursalVal);
                     if (!queueId) {
                         showMessage(translations[currentLang].errorSelectTerminal, 'error');
                         return;
@@ -467,15 +482,14 @@
                     try {
                         setLoading(true);
 
-                        const result = await createTurn(payload);
+                        const result = await createTurn(payload, queueId, branchId);
                         console.log('Turno creado:', result);
 
                         // Extraer código del turno de la respuesta
-                        // La API puede devolver el código en diferentes campos
-                        const turnCode = result.code || result.turnCode || result.ticketNumber || 
-                                        result.id || result.ticket || result.number || 
-                                        (result.data && (result.data.code || result.data.ticketNumber)) ||
-                                        'N/A';
+                        const turnCode = result.code || result.turnCode || result.ticketNumber ||
+                                         result.id || result.ticket || result.number ||
+                                         (result.data && (result.data.code || result.data.ticketNumber)) ||
+                                         'N/A';
 
                         // Mostrar modal de turno generado
                         if (turnCodeDisplay) {
@@ -501,3 +515,4 @@
     </script>
 </body>
 </html>
+
