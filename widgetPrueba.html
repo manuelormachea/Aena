@@ -177,11 +177,80 @@
         <div class="modal-overlay" id="turnSuccessModal">
             <div class="modal-container turn-success-modal">
                 <div class="turn-success-content">
-                    <div class="turn-success-icon">✓</div>
-                    <h2 class="turn-success-title" data-i18n="turnGeneratedTitle">Turno Generado!</h2>
-                    <p class="turn-code-label" data-i18n="turnCodeLabel">Código del Turno:</p>
-                    <div class="turn-code-display" id="turnCodeDisplay"></div>
-                    <button class="btn btn-primary" id="closeTurnSuccessModal" data-i18n="closeTurnModal">Cerrar</button>
+                    <!-- Header -->
+                    <div class="turn-modal-header">
+                        <div class="turn-modal-header-left">
+                            <span class="turn-modal-clock-icon">🕐</span>
+                            <h2 class="turn-modal-header-title" data-i18n="reserveTurnTitle">RESERVA TU TURNO</h2>
+                        </div>
+                        <button class="turn-modal-close-btn" id="closeTurnSuccessModal">×</button>
+                    </div>
+
+                    <!-- Success Banner -->
+                    <div class="turn-success-banner">
+                        <div class="turn-success-banner-content">
+                            <span class="turn-success-check">✓</span>
+                            <span class="turn-success-banner-text" data-i18n="turnReservedSuccess">Turno Reservado Exitosamente</span>
+                        </div>
+                    </div>
+                    <p class="turn-success-message" data-i18n="turnGeneratedMessage">¡Tu turno ha sido generado en el sistema!</p>
+
+                    <!-- Turn Information Cards -->
+                    <div class="turn-info-cards">
+                        <!-- Código del Turno (Full Width) -->
+                        <div class="turn-info-card turn-info-card-full">
+                            <span class="turn-info-card-label" data-i18n="turnCodeLabel">Código del Turno:</span>
+                            <span class="turn-info-card-value turn-code-link" id="turnCodeDisplay">-</span>
+                        </div>
+
+                        <!-- Two Column Cards -->
+                        <div class="turn-info-cards-row">
+                            <div class="turn-info-card">
+                                <span class="turn-info-card-label" data-i18n="turnNumberLabel">Número de Turno:</span>
+                                <span class="turn-info-card-value" id="turnNumberDisplay">-</span>
+                            </div>
+                            <div class="turn-info-card">
+                                <span class="turn-info-card-label" data-i18n="turnStatusLabel">Estado del Turno:</span>
+                                <span class="turn-info-card-value" data-i18n="turnStatusValue" id="turnStatusDisplay">En breve lo llamaremos</span>
+                            </div>
+                        </div>
+
+                        <div class="turn-info-cards-row">
+                            <div class="turn-info-card">
+                                <span class="turn-info-card-label" data-i18n="currentWaitTimeLabel">Tiempo de Espera Actual:</span>
+                                <span class="turn-info-card-value" id="currentWaitTimeDisplay">N/A</span>
+                            </div>
+                            <div class="turn-info-card">
+                                <span class="turn-info-card-label" data-i18n="avgWaitTimeLabel">Tiempo Promedio de Espera:</span>
+                                <span class="turn-info-card-value" id="avgWaitTimeDisplay">1 min</span>
+                            </div>
+                        </div>
+
+                        <div class="turn-info-cards-row">
+                            <div class="turn-info-card">
+                                <span class="turn-info-card-label" data-i18n="queueServiceLabel">Cola/Servicio:</span>
+                                <span class="turn-info-card-value" id="queueServiceDisplay">-</span>
+                            </div>
+                            <div class="turn-info-card">
+                                <span class="turn-info-card-label" data-i18n="waitingRoomLabel">Sala de Espera:</span>
+                                <span class="turn-info-card-value" id="waitingRoomDisplay">-</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Video Call Button -->
+                    <div class="turn-video-call-section">
+                        <button class="btn btn-video-call" id="videoCallBtn" disabled>
+                            <span class="video-call-icon">📹</span>
+                            <span data-i18n="connectVideoCall">Conectarme a videollamada</span>
+                        </button>
+                        <p class="video-call-message" data-i18n="videoCallMessage">El botón se habilitará cuando el agente te llame.</p>
+                    </div>
+
+                    <!-- Cancel Button -->
+                    <div class="turn-modal-buttons">
+                        <button class="btn btn-cancel-turn" id="cancelTurnBtn" data-i18n="cancelTurn">Cancelar mi turno</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -190,15 +259,8 @@
     <!-- JS TODO JUNTO -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const API_URL   = 'https://mobile.euro.debmedia.com/api/v1/queue/:queueId/branch/:branchId/enqueue';
+            const API_BASE_URL = 'https://mobile.euro.debmedia.com/api/v1/queue';
             const API_TOKEN = 'l13h4QS8h7ILVDAOduVpAwghCuG6LM5grbHRD9Nb';
-
-            // 🔹 Construye la URL real usando queueId y branchId
-            function buildApiUrl(queueId, branchId) {
-                return API_URL
-                    .replace(':queueId', queueId)
-                    .replace(':branchId', branchId);
-            }
 
             // Translations
             const translations = {
@@ -227,8 +289,23 @@
                     waitingMessage: 'Tu turno ha sido encolado. Esperando confirmación...',
                     cancelar: 'Cancelar',
                     turnGeneratedTitle: 'Turno Generado!',
+                    reserveTurnTitle: 'RESERVA TU TURNO',
+                    turnReservedSuccess: 'Turno Reservado Exitosamente',
+                    turnGeneratedMessage: '¡Tu turno ha sido generado en el sistema!',
                     turnCodeLabel: 'Código del Turno:',
-                    closeTurnModal: 'Cerrar',
+                    turnNumberLabel: 'Número de Turno:',
+                    turnStatusLabel: 'Estado del Turno:',
+                    turnStatusValue: 'En breve lo llamaremos',
+                    currentWaitTimeLabel: 'Tiempo de Espera Actual:',
+                    avgWaitTimeLabel: 'Tiempo Promedio de Espera:',
+                    queueServiceLabel: 'Cola/Servicio:',
+                    waitingRoomLabel: 'Sala de Espera:',
+                    connectVideoCall: 'Conectarme a videollamada',
+                    videoCallMessage: 'El botón se habilitará cuando el agente te llame.',
+                    cancelTurn: 'Cancelar mi turno',
+                    cancelTurnConfirm: '¿Estás seguro de que deseas cancelar tu turno?',
+                    cancelTurnSuccess: 'Tu turno ha sido cancelado exitosamente.',
+                    cancelTurnError: 'Hubo un error al cancelar tu turno. Inténtalo de nuevo.',
                     errorSelectTerminal: 'Selecciona una terminal válida.',
                     errorSelectSala: 'Selecciona una Sala VIP.',
                     successMessage: 'Tu turno presencial ha sido generado. Revisa tu correo con los detalles.',
@@ -259,8 +336,23 @@
                     waitingMessage: 'Your turn has been queued. Waiting for confirmation...',
                     cancelar: 'Cancel',
                     turnGeneratedTitle: 'Turn Generated!',
+                    reserveTurnTitle: 'RESERVE YOUR TURN',
+                    turnReservedSuccess: 'Turn Reserved Successfully',
+                    turnGeneratedMessage: 'Your turn has been generated in the system!',
                     turnCodeLabel: 'Turn Code:',
-                    closeTurnModal: 'Close',
+                    turnNumberLabel: 'Turn Number:',
+                    turnStatusLabel: 'Turn Status:',
+                    turnStatusValue: 'We will call you shortly',
+                    currentWaitTimeLabel: 'Current Waiting Time:',
+                    avgWaitTimeLabel: 'Average Waiting Time:',
+                    queueServiceLabel: 'Queue/Service:',
+                    waitingRoomLabel: 'Waiting Room:',
+                    connectVideoCall: 'Connect to video call',
+                    videoCallMessage: 'The button will be enabled when the agent calls you.',
+                    cancelTurn: 'Cancel my turn',
+                    cancelTurnConfirm: 'Are you sure you want to cancel your turn?',
+                    cancelTurnSuccess: 'Your turn has been successfully cancelled.',
+                    cancelTurnError: 'There was an error cancelling your turn. Please try again.',
                     errorSelectTerminal: 'Please select a valid terminal.',
                     errorSelectSala: 'Please select a VIP Lounge.',
                     successMessage: 'Your in-person turn has been generated. Check your email for details.',
@@ -331,8 +423,15 @@
             const closeTermsModal   = document.getElementById('closeTermsModal');
 
             const turnSuccessModal  = document.getElementById('turnSuccessModal');
+            const turnNumberDisplay = document.getElementById('turnNumberDisplay');
+            const turnStatusDisplay = document.getElementById('turnStatusDisplay');
+            const currentWaitTimeDisplay = document.getElementById('currentWaitTimeDisplay');
+            const avgWaitTimeDisplay = document.getElementById('avgWaitTimeDisplay');
+            const queueServiceDisplay = document.getElementById('queueServiceDisplay');
+            const waitingRoomDisplay = document.getElementById('waitingRoomDisplay');
             const turnCodeDisplay   = document.getElementById('turnCodeDisplay');
             const closeTurnSuccessModal = document.getElementById('closeTurnSuccessModal');
+            const cancelTurnBtn     = document.getElementById('cancelTurnBtn');
 
             function showMessage(text, type) {
                 if (!messageContainer || !messageBox) return;
@@ -359,19 +458,14 @@
                 return null;
             }
 
-            // 🔹 Mapear sucursal -> queueId
-            function mapSucursalToQueueId(value) {
-                if (value === 'barajas-t1')  return 819; // T1
-                if (value === 'neptuno-t4s') return 715; // T4S
-                return null;
-            }
-
             async function createTurn(payload, queueId, branchId) {
+                // Construir URL dinámica reemplazando los placeholders
+                const apiUrl = `${API_BASE_URL}/${queueId}/branch/${branchId}/enqueue`;
+                
                 console.log('Enviando payload a Debmedia:', payload);
-
-                const url = buildApiUrl(queueId, branchId);
-
-                const res = await fetch(url, {
+                console.log('URL:', apiUrl);
+                
+                const res = await fetch(apiUrl, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -427,6 +521,56 @@
                 });
             }
 
+            // Función para cancelar turno
+            async function cancelTurn(turnCode) {
+                if (!turnCode || turnCode === 'N/A') {
+                    showMessage(translations[currentLang].cancelTurnError, 'error');
+                    return;
+                }
+
+                if (!confirm(translations[currentLang].cancelTurnConfirm)) {
+                    return;
+                }
+
+                try {
+                    const cancelUrl = `https://mobile.euro.debmedia.com/api/v1/turn/${turnCode}/cancel`;
+                    console.log('Cancelando turno:', cancelUrl);
+
+                    const res = await fetch(cancelUrl, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': 'Bearer ' + API_TOKEN
+                        }
+                    });
+
+                    if (!res.ok) {
+                        let extra = '';
+                        try { extra = await res.text(); } catch (_) {}
+                        throw new Error('Error API (' + res.status + '): ' + extra);
+                    }
+
+                    showMessage(translations[currentLang].cancelTurnSuccess, 'success');
+                    
+                    // Cerrar el modal después de cancelar
+                    if (turnSuccessModal) {
+                        turnSuccessModal.classList.remove('active');
+                    }
+
+                } catch (err) {
+                    console.error('Error al cancelar turno:', err);
+                    showMessage(translations[currentLang].cancelTurnError, 'error');
+                }
+            }
+
+            // Event listener para botón de cancelar turno
+            if (cancelTurnBtn) {
+                cancelTurnBtn.addEventListener('click', () => {
+                    const turnCode = turnCodeDisplay ? turnCodeDisplay.textContent : null;
+                    cancelTurn(turnCode);
+                });
+            }
+
             // Submit formulario
             if (form) {
                 form.addEventListener('submit', async (e) => {
@@ -452,8 +596,10 @@
                         return;
                     }
 
-                    // Determinar queueId según la terminal seleccionada
-                    const queueId = mapSucursalToQueueId(sucursalVal);
+                    // Determinar queueId según la terminal
+                    const queueId = sucursalVal === 'barajas-t1' ? 819 : 
+                                   sucursalVal === 'neptuno-t4s' ? 715 : null;
+                    
                     if (!queueId) {
                         showMessage(translations[currentLang].errorSelectTerminal, 'error');
                         return;
@@ -474,9 +620,7 @@
                         firstName: firstName,
                         lastName:  lastName,
                         email:     email,
-                        phone:     fullPhone,
-                        branchId:  branchId,
-                        queueId:   queueId
+                        phone:     fullPhone
                     };
 
                     try {
@@ -485,16 +629,50 @@
                         const result = await createTurn(payload, queueId, branchId);
                         console.log('Turno creado:', result);
 
-                        // Extraer código del turno de la respuesta
-                        const turnCode = result.code || result.turnCode || result.ticketNumber ||
-                                         result.id || result.ticket || result.number ||
-                                         (result.data && (result.data.code || result.data.ticketNumber)) ||
-                                         'N/A';
+                        // Extraer información del turno de la respuesta
+                        const turnData = result.data || result;
+                        
+                        // Extraer código del turno
+                        const turnCode = turnData.code || result.code || turnData.ticketNumber || 
+                                        result.turnCode || result.ticketNumber || 
+                                        turnData.id || result.id || 
+                                        turnData.ticket || result.ticket || 
+                                        turnData.number || result.number || 
+                                        'N/A';
 
-                        // Mostrar modal de turno generado
-                        if (turnCodeDisplay) {
-                            turnCodeDisplay.textContent = turnCode;
+                        // Extraer número y letra del turno (combinados)
+                        const turnNumber = turnData.number || result.number || turnData.ticketNumber || result.ticketNumber || '-';
+                        const turnLetter = turnData.letter || result.letter || turnData.ticketLetter || result.ticketLetter || '';
+                        const turnNumberWithLetter = turnLetter ? `${turnNumber}${turnLetter}` : turnNumber;
+
+                        // Extraer nombre de la cola/servicio
+                        const queueService = turnData.queueName || result.queueName || 
+                                            turnData.queue?.name || result.queue?.name ||
+                                            turnData.serviceName || result.serviceName ||
+                                            'Sala VIP';
+
+                        // Extraer sala de espera
+                        const waitingRoom = turnData.waitingRoom || result.waitingRoom ||
+                                          turnData.roomName || result.roomName ||
+                                          'Sala de espera 1';
+
+                        // Extraer tiempos de espera
+                        const currentWaitTime = turnData.currentWaitTime || result.currentWaitTime || 
+                                              turnData.waitingTime || result.waitingTime || 
+                                              'N/A';
+                        const avgWaitTime = turnData.avgWaitTime || result.avgWaitTime ||
+                                           turnData.averageWaitTime || result.averageWaitTime ||
+                                           '1 min';
+
+                        // Mostrar información en el modal
+                        if (turnNumberDisplay) {
+                            turnNumberDisplay.textContent = turnNumberWithLetter;
                         }
+                        if (queueServiceDisplay) queueServiceDisplay.textContent = queueService;
+                        if (waitingRoomDisplay) waitingRoomDisplay.textContent = waitingRoom;
+                        if (currentWaitTimeDisplay) currentWaitTimeDisplay.textContent = currentWaitTime;
+                        if (avgWaitTimeDisplay) avgWaitTimeDisplay.textContent = avgWaitTime;
+                        if (turnCodeDisplay) turnCodeDisplay.textContent = turnCode;
 
                         if (turnSuccessModal) {
                             turnSuccessModal.classList.add('active');
@@ -515,4 +693,6 @@
     </script>
 </body>
 </html>
+
+
 
