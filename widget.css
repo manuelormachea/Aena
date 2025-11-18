@@ -3,6 +3,7 @@
     --aena-green: #00A859;
     --aena-dark-green: #008A4A;
     --aena-light-green: #E6F5ED;
+    --aena-dark-blue: #1a2332;
     --text-dark: #333333;
     --text-light: #666666;
     --white: #FFFFFF;
@@ -35,14 +36,57 @@ body {
     background: var(--white);
     min-height: 100vh;
     box-shadow: var(--shadow);
+    position: relative;
+}
+
+/* Language Selector Top */
+.language-selector-top {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    display: flex;
+    gap: 5px;
+    z-index: 100;
+}
+
+.lang-btn {
+    background: rgba(255, 255, 255, 0.2);
+    color: var(--white);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    padding: 5px 12px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.lang-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.lang-btn.active {
+    background: var(--white);
+    color: var(--aena-dark-blue);
+    border-color: var(--white);
 }
 
 /* Header */
 .widget-header {
-    background: linear-gradient(135deg, var(--aena-green) 0%, var(--aena-dark-green) 100%);
+    background: #1A2732;
     color: var(--white);
     padding: 20px;
     text-align: center;
+    position: relative;
+}
+
+.header-top-section {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
 }
 
 .logo-container {
@@ -50,11 +94,36 @@ body {
     align-items: center;
     justify-content: center;
     gap: 10px;
-    margin-bottom: 15px;
+}
+
+.header-tagline {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    color: var(--aena-green);
+    font-size: 13px;
+    line-height: 1.4;
+}
+
+.tagline-line1 {
+    display: block;
+}
+
+.tagline-line2 {
+    display: block;
+    text-decoration: underline;
+    text-decoration-color: var(--aena-green);
+    text-underline-offset: 3px;
+}
+
+.airplane-icon {
+    display: inline-block;
+    margin-left: 5px;
+    font-size: 12px;
 }
 
 .logo-img {
-    height: 35px;
+    height: 40px;
     width: auto;
     object-fit: contain;
 }
@@ -412,8 +481,8 @@ body {
     border: none;
 }
 
-/* Waiting Room */
-.waiting-room {
+/* Turn Modal */
+.turn-modal {
     position: fixed;
     top: 0;
     left: 0;
@@ -427,6 +496,139 @@ body {
     padding: 20px;
 }
 
+.turn-modal-container {
+    max-width: 400px;
+    width: 100%;
+}
+
+.turn-modal-content {
+    background: var(--white);
+    border-radius: 12px;
+    padding: 40px 30px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Turn Success Modal */
+.turn-success-modal {
+    max-width: 450px;
+    width: 100%;
+    padding: 0;
+}
+
+.turn-success-content {
+    background: var(--white);
+    border-radius: 12px;
+    padding: 40px 30px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+}
+
+.turn-success-icon {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: var(--aena-light-green);
+    color: var(--aena-green);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 48px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    line-height: 1;
+}
+
+.turn-success-title {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin: 0 0 25px 0;
+}
+
+.turn-code-label {
+    font-size: 16px;
+    color: var(--text-light);
+    margin: 0 0 15px 0;
+    font-weight: 500;
+}
+
+.turn-code-display {
+    background: var(--gray-light);
+    border: 2px solid var(--aena-green);
+    border-radius: 8px;
+    padding: 20px 30px;
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--aena-green);
+    letter-spacing: 2px;
+    margin-bottom: 30px;
+    min-width: 200px;
+    font-family: 'Courier New', monospace;
+}
+
+.turn-success-content .btn {
+    margin-top: 0;
+    max-width: 200px;
+}
+
+.turn-modal-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin-bottom: 25px;
+}
+
+.turn-code-container {
+    margin: 20px 0;
+    padding: 20px;
+    background: var(--gray-light);
+    border-radius: 8px;
+    width: 100%;
+}
+
+.turn-code-label {
+    font-size: 14px;
+    color: var(--text-light);
+    margin-bottom: 10px;
+}
+
+.turn-code {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--aena-green);
+    margin: 0;
+    letter-spacing: 2px;
+}
+
+.btn-cancel-turn {
+    width: 100%;
+    background: transparent;
+    color: #d32f2f;
+    border: 2px solid #d32f2f;
+    padding: 14px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    margin-top: 20px;
+}
+
+.btn-cancel-turn:hover {
+    background: #d32f2f;
+    color: var(--white);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(211, 47, 47, 0.3);
+}
+
 .waiting-content {
     background: var(--white);
     border-radius: 12px;
@@ -434,11 +636,25 @@ body {
     text-align: center;
     max-width: 400px;
     width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
 .waiting-icon {
-    font-size: 48px;
+    font-size: 64px;
     margin-bottom: 15px;
+    color: var(--aena-green);
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: var(--aena-light-green);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    line-height: 1;
 }
 
 .waiting-title {
@@ -471,12 +687,33 @@ body {
 
 .turn-info {
     background: var(--aena-light-green);
-    padding: 12px;
+    padding: 15px;
     border-radius: 8px;
     margin: 15px 0;
     color: var(--text-dark);
-    font-weight: 600;
     font-size: 14px;
+    text-align: center;
+    width: 100%;
+    max-width: 100%;
+}
+
+.turn-details {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.turn-detail {
+    margin: 0;
+    padding: 5px 0;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.turn-detail strong {
+    color: var(--aena-dark-green);
+    font-weight: 600;
+    margin-right: 8px;
 }
 
 /* Responsive */

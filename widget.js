@@ -12,6 +12,63 @@ const FILAVIRTUAL_TOKEN = 'l13h4QS8h7ILVDAOduVpAwghCuG6LM5grbHRD9Nb';
 // Variables globales
 let currentTurnoId = null;
 let turnoCheckInterval = null;
+let currentLanguage = 'es'; // Idioma por defecto: español
+
+// Traducciones
+const translations = {
+    es: {
+        title: 'Reserva Sala VIP',
+        terminal: 'Terminal',
+        selectTerminal: 'Selecciona una terminal',
+        vipLounge: 'Sala VIP',
+        selectLounge: 'Selecciona una sala',
+        firstName: 'Nombre',
+        lastName: 'Apellido',
+        phone: 'Teléfono',
+        companions: 'Acompañantes',
+        companionsHelp: 'Número de personas que te acompañarán (incluyéndote a ti)',
+        email: 'Email',
+        legalText: 'Al continuar, aceptas nuestras políticas:',
+        numiaPrivacy: 'Política de privacidad de datos de Numia',
+        qualitySecurity: 'Política de Calidad y Seguridad',
+        aenaPrivacy: 'Política de Privacidad Aena',
+        viewTerms: 'Ver Términos y Condiciones de Aena',
+        acceptTerms: 'Acepto los Términos y Condiciones de Aena',
+        reserve: 'Reservar',
+        turnGenerated: 'Turno Generado',
+        turnCode: 'Código del turno:',
+        cancelMyTurn: 'Cancelar mi turno',
+        processing: 'Procesando...',
+        turnCanceled: 'Turno cancelado exitosamente',
+        errorCanceling: 'Error al cancelar el turno'
+    },
+    en: {
+        title: 'Reserve VIP Lounge',
+        terminal: 'Terminal',
+        selectTerminal: 'Select a terminal',
+        vipLounge: 'VIP Lounge',
+        selectLounge: 'Select a lounge',
+        firstName: 'First Name',
+        lastName: 'Last Name',
+        phone: 'Phone',
+        companions: 'Companions',
+        companionsHelp: 'Number of people who will accompany you (including yourself)',
+        email: 'Email',
+        legalText: 'By continuing, you accept our policies:',
+        numiaPrivacy: 'Numia Data Privacy Policy',
+        qualitySecurity: 'Quality and Security Policy',
+        aenaPrivacy: 'Aena Privacy Policy',
+        viewTerms: 'View Aena Terms and Conditions',
+        acceptTerms: 'I accept Aena Terms and Conditions',
+        reserve: 'Reserve',
+        turnGenerated: 'Turn Generated',
+        turnCode: 'Turn code:',
+        cancelMyTurn: 'Cancel my turn',
+        processing: 'Processing...',
+        turnCanceled: 'Turn canceled successfully',
+        errorCanceling: 'Error canceling turn'
+    }
+};
 
 /**
  * Configurar token de filavirtual
@@ -52,46 +109,100 @@ function hideMessage() {
 }
 
 /**
- * Mostrar sala de espera
+ * Cambiar idioma del formulario
  */
-function showWaitingRoom(turnoData) {
-    const waitingRoom = document.getElementById('waitingRoom');
-    const turnInfo = document.getElementById('turnInfo');
+function changeLanguage(lang) {
+    currentLanguage = lang;
     
-    if (waitingRoom) {
-        waitingRoom.style.display = 'flex';
-        
-        if (turnInfo && turnoData) {
-            turnInfo.innerHTML = `
-                <p>Turno #${turnoData.id || 'Generado'}</p>
-                ${turnoData.posicion ? `<p style="font-size: 12px; margin-top: 5px;">Posición en cola: ${turnoData.posicion}</p>` : ''}
-            `;
+    // Actualizar botones de idioma
+    document.querySelectorAll('.lang-btn').forEach(btn => {
+        if (btn.dataset.lang === lang) {
+            btn.classList.add('active');
+        } else {
+            btn.classList.remove('active');
         }
-        
-        // Iniciar verificación del estado del turno
-        if (turnoData?.id) {
-            currentTurnoId = turnoData.id;
-            startTurnoStatusCheck();
+    });
+    
+    // Actualizar todos los textos con data-i18n
+    document.querySelectorAll('[data-i18n]').forEach(element => {
+        const key = element.getAttribute('data-i18n');
+        if (translations[lang] && translations[lang][key]) {
+            element.textContent = translations[lang][key];
         }
+    });
+    
+    // Actualizar placeholders
+    const phoneInput = document.getElementById('telefono');
+    if (phoneInput) {
+        phoneInput.placeholder = lang === 'es' ? '123456789' : '123456789';
     }
 }
 
 /**
- * Ocultar sala de espera
+ * Mostrar popup de turno encolado
  */
-function hideWaitingRoom() {
-    const waitingRoom = document.getElementById('waitingRoom');
-    if (waitingRoom) {
-        waitingRoom.style.display = 'none';
-    }
+function showTurnModal(turnoData) {
+    const turnModal = document.getElementById('turnModal');
+    const turnCodeDisplay = document.getElementById('turnCodeDisplay');
     
-    // Detener verificación
-    if (turnoCheckInterval) {
-        clearInterval(turnoCheckInterval);
-        turnoCheckInterval = null;
+    if (turnModal) {
+        // Obtener código del turno
+        const turnCode = turnoData?.id || turnoData?.turnoId || turnoData?.data?.id || turnoData?.codigo || 'N/A';
+        
+        if (turnCodeDisplay) {
+            turnCodeDisplay.textContent = turnCode;
+        }
+        
+        // Guardar ID del turno para cancelación
+        currentTurnoId = turnCode;
+        
+        // Mostrar modal
+        turnModal.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+        
+        // Actualizar traducciones del modal
+        changeLanguage(currentLanguage);
     }
-    
+}
+
+/**
+ * Ocultar popup de turno
+ */
+function hideTurnModal() {
+    const turnModal = document.getElementById('turnModal');
+    if (turnModal) {
+        turnModal.style.display = 'none';
+        document.body.style.overflow = '';
+    }
     currentTurnoId = null;
+}
+
+/**
+ * Cancelar turno
+ */
+async function cancelTurn() {
+    if (!currentTurnoId) {
+        showMessage(translations[currentLanguage].errorCanceling, 'error');
+        return;
+    }
+    
+    if (!confirm(currentLanguage === 'es' ? '¿Estás seguro de que deseas cancelar tu turno?' : 'Are you sure you want to cancel your turn?')) {
+        return;
+    }
+    
+    try {
+        const response = await api.cancelTurnoFilavirtual(currentTurnoId);
+        
+        if (response.success) {
+            showMessage(translations[currentLanguage].turnCanceled, 'success');
+            hideTurnModal();
+        } else {
+            showMessage(translations[currentLanguage].errorCanceling + ': ' + (response.error || ''), 'error');
+        }
+    } catch (error) {
+        console.error('Error cancelando turno:', error);
+        showMessage(translations[currentLanguage].errorCanceling, 'error');
+    }
 }
 
 /**
@@ -174,7 +285,7 @@ async function handleFormSubmit(e) {
     const btnLoader = submitBtn.querySelector('.btn-loader');
     
     submitBtn.disabled = true;
-    if (btnText) btnText.textContent = 'Procesando...';
+    if (btnText) btnText.textContent = translations[currentLanguage].processing;
     if (btnLoader) btnLoader.style.display = 'inline-block';
 
     try {
@@ -203,19 +314,19 @@ async function handleFormSubmit(e) {
 
         if (response.success && response.data) {
             // Turno generado exitosamente
-            showWaitingRoom(response.data);
+            showTurnModal(response.data);
         } else {
             // Error al generar turno
             showMessage('Error al generar el turno: ' + (response.error || 'Error desconocido. Por favor, intenta nuevamente.'), 'error');
             submitBtn.disabled = false;
-            if (btnText) btnText.textContent = 'Reservar';
+            if (btnText) btnText.textContent = translations[currentLanguage].reserve;
             if (btnLoader) btnLoader.style.display = 'none';
         }
     } catch (error) {
         console.error('Error en handleFormSubmit:', error);
         showMessage('Error al procesar la solicitud. Por favor, intenta nuevamente.', 'error');
         submitBtn.disabled = false;
-        if (btnText) btnText.textContent = 'Reservar';
+        if (btnText) btnText.textContent = translations[currentLanguage].reserve;
         if (btnLoader) btnLoader.style.display = 'none';
     }
 }
@@ -233,13 +344,25 @@ document.addEventListener('DOMContentLoaded', () => {
         form.addEventListener('submit', handleFormSubmit);
     }
 
-    // Event listener para cancelar sala de espera
-    const cancelWaitingBtn = document.getElementById('cancelWaiting');
-    if (cancelWaitingBtn) {
-        cancelWaitingBtn.addEventListener('click', () => {
-            hideWaitingRoom();
-            showMessage('Turno cancelado.', 'error');
-        });
+    // Event listeners para selector de idioma
+    const langEsBtn = document.getElementById('langEs');
+    const langEnBtn = document.getElementById('langEn');
+    
+    if (langEsBtn) {
+        langEsBtn.addEventListener('click', () => changeLanguage('es'));
+    }
+    
+    if (langEnBtn) {
+        langEnBtn.addEventListener('click', () => changeLanguage('en'));
+    }
+    
+    // Inicializar con español
+    changeLanguage('es');
+    
+    // Event listener para cancelar turno
+    const cancelTurnBtn = document.getElementById('cancelTurnBtn');
+    if (cancelTurnBtn) {
+        cancelTurnBtn.addEventListener('click', cancelTurn);
     }
 
     // Event listeners para modal de términos y condiciones
