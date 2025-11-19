@@ -664,6 +664,7 @@
 
                     const res = await fetch(cancelUrl, {
                         method: 'POST',
+                        body: "{}",
                         headers: {
                             'Content-Type': 'application/json',
                             'Authorization': 'Bearer ' + API_TOKEN
