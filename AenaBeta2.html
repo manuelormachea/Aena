@@ -212,7 +212,7 @@
                         <!-- Two Column Cards -->
                         <div class="turn-info-cards-row">
                             <div class="turn-info-card">
-                                <span class="turn-info-card-label" data-i18n="turnNumberLabel">Número de Turno:</span>
+                                <span class="turn-info-card-label" data-i18n="turnLabel">Turno:</span>
                                 <span class="turn-info-card-value" id="turnNumberDisplay">-</span>
                             </div>
                             <div class="turn-info-card">
@@ -234,12 +234,8 @@
 
                         <div class="turn-info-cards-row">
                             <div class="turn-info-card">
-                                <span class="turn-info-card-label" data-i18n="queueServiceLabel">Cola/Servicio:</span>
+                                <span class="turn-info-card-label" data-i18n="tramiteLabel">Trámite:</span>
                                 <span class="turn-info-card-value" id="queueServiceDisplay">-</span>
-                            </div>
-                            <div class="turn-info-card">
-                                <span class="turn-info-card-label" data-i18n="waitingRoomLabel">Sala de Espera:</span>
-                                <span class="turn-info-card-value" id="waitingRoomDisplay">-</span>
                             </div>
                         </div>
                     </div>
@@ -290,13 +286,12 @@
                     turnReservedSuccess: 'Turno Reservado Exitosamente',
                     turnGeneratedMessage: '¡Tu turno ha sido generado en el sistema!',
                     turnCodeLabel: 'Código del Turno:',
-                    turnNumberLabel: 'Número de Turno:',
+                    turnLabel: 'Turno:',
                     turnStatusLabel: 'Estado del Turno:',
                     turnStatusValue: 'En breve lo llamaremos',
                     waitingTurnsLabel: 'Turnos en espera:',
                     avgWaitTimeLabel: 'Tiempo Promedio de Espera:',
-                    queueServiceLabel: 'Cola/Servicio:',
-                    waitingRoomLabel: 'Sala de Espera:',
+                    tramiteLabel: 'Trámite:',
                     turnStatusWaiting: 'En breve lo llamaremos',
                     turnStatusCalling: 'Lo estamos llamando',
                     turnStatusFinalized: 'Atención finalizada',
@@ -344,13 +339,12 @@
                     turnReservedSuccess: 'Turn Reserved Successfully',
                     turnGeneratedMessage: 'Your turn has been generated in the system!',
                     turnCodeLabel: 'Turn Code:',
-                    turnNumberLabel: 'Turn Number:',
+                    turnLabel: 'Turn:',
                     turnStatusLabel: 'Turn Status:',
                     turnStatusValue: 'We will call you shortly',
                     waitingTurnsLabel: 'Turns waiting:',
                     avgWaitTimeLabel: 'Average Waiting Time:',
-                    queueServiceLabel: 'Queue/Service:',
-                    waitingRoomLabel: 'Waiting Room:',
+                    tramiteLabel: 'Service:',
                     turnStatusWaiting: 'We will call you shortly',
                     turnStatusCalling: 'We are calling you',
                     turnStatusFinalized: 'Service completed',
@@ -433,7 +427,6 @@
             const waitingTurnsDisplay = document.getElementById('waitingTurnsDisplay');
             const avgWaitTimeDisplay = document.getElementById('avgWaitTimeDisplay');
             const queueServiceDisplay = document.getElementById('queueServiceDisplay');
-            const waitingRoomDisplay = document.getElementById('waitingRoomDisplay');
             const turnCodeDisplay   = document.getElementById('turnCodeDisplay');
             const closeTurnSuccessModal = document.getElementById('closeTurnSuccessModal');
             const cancelTurnBtn     = document.getElementById('cancelTurnBtn');
@@ -517,13 +510,14 @@
             }
 
             // Función para actualizar el modal con los datos del turno
-            function updateTurnModal({ code, turn, waitingTurns, averageWaitingTime, queueName, waitingRoom, turnStatus }) {
+            function updateTurnModal({ code, turn, waitingTurns, averageWaitingTime, queueName, turnStatus }) {
                 if (turnCodeDisplay && code) turnCodeDisplay.textContent = code;
                 if (turnNumberDisplay && turn) turnNumberDisplay.textContent = turn;
-                if (waitingTurnsDisplay && waitingTurns !== undefined) waitingTurnsDisplay.textContent = waitingTurns;
+                if (waitingTurnsDisplay && waitingTurns !== undefined && waitingTurns !== null) {
+                    waitingTurnsDisplay.textContent = waitingTurns;
+                }
                 if (avgWaitTimeDisplay && averageWaitingTime) avgWaitTimeDisplay.textContent = averageWaitingTime;
                 if (queueServiceDisplay && queueName) queueServiceDisplay.textContent = queueName;
-                if (waitingRoomDisplay && waitingRoom) waitingRoomDisplay.textContent = waitingRoom;
                 
                 // Actualizar estado del turno
                 if (turnStatusDisplay && turnStatus) {
@@ -579,6 +573,12 @@
 
                         const data = await res.json();
                         const turnData = data.data || data;
+                        const jsonDetails = turnData.jsonDetails || data.jsonDetails || {};
+                        
+                        // La respuesta puede tener branch.monitorInfo o monitorInfo directamente
+                        const branch = data.branch || turnData.branch || {};
+                        const branchMonitorInfo = branch.monitorInfo || {};
+                        const monitorInfo = turnData.monitorInfo || data.monitorInfo || branchMonitorInfo || {};
 
                         // Mapear el estado
                         const status = turnData.status || turnData.turnStatus || 'WAITING_TO_BE_CALLED';
@@ -589,30 +589,39 @@
                             turnStatusDisplay.className = `turn-info-card-value ${m.cls}`;
                         }
 
-                        // Actualizar tiempo promedio de espera
-                        const avgWait = turnData.averageWaitingTime || turnData.serviceTime;
+                        // Extraer turno
+                        const turn = jsonDetails.turn || turnData.turn || '-';
+
+                        // Extraer turnos en espera (de branch.monitorInfo.waitingTurns o monitorInfo.waitingTurns)
+                        const waitingTurns = branchMonitorInfo.waitingTurns !== undefined ? branchMonitorInfo.waitingTurns :
+                                           monitorInfo.waitingTurns !== undefined ? monitorInfo.waitingTurns :
+                                           turnData.waitingTurns !== undefined ? turnData.waitingTurns :
+                                           data.waitingTurns !== undefined ? data.waitingTurns :
+                                           '-';
+
+                        // Actualizar tiempo promedio de espera (de jsonDetails.averageWaitingTime o monitorInfo.avgWaitingTime)
+                        let avgWait = jsonDetails.averageWaitingTime || 
+                                     branchMonitorInfo.avgWaitingTime ||
+                                     monitorInfo.avgWaitingTime ||
+                                     turnData.averageWaitingTime || 
+                                     turnData.serviceTime;
+                        
+                        let avgWaitTimeFormatted = '-';
                         if (avgWait !== undefined && avgWait !== null && !isNaN(avgWait)) {
                             const avgMinutes = Math.floor(parseFloat(avgWait));
-                            if (avgWaitTimeDisplay) {
-                                avgWaitTimeDisplay.textContent = `${avgMinutes} min`;
-                            }
+                            avgWaitTimeFormatted = `${avgMinutes} min`;
                         }
 
-                        // Actualizar turnos en espera
-                        if (turnData.waitingTurns !== undefined) {
-                            if (waitingTurnsDisplay) {
-                                waitingTurnsDisplay.textContent = turnData.waitingTurns;
-                            }
-                        }
+                        // Trámite fijo
+                        const queueName = 'Ingreso a sala VIP';
 
                         // Actualizar otros campos si están disponibles
                         updateTurnModal({
                             code: cleanCode,
-                            turn: turnData.turn,
-                            waitingTurns: turnData.waitingTurns,
-                            averageWaitingTime: avgWait ? `${Math.floor(parseFloat(avgWait))} min` : undefined,
-                            queueName: turnData.queueName || turnData.queue?.name,
-                            waitingRoom: turnData.waitingRoom || turnData.roomName,
+                            turn: turn,
+                            waitingTurns: waitingTurns,
+                            averageWaitingTime: avgWaitTimeFormatted,
+                            queueName: queueName,
                             turnStatus: status
                         });
 
@@ -814,38 +823,49 @@
                                         turnData.number || result.number || 
                                         'N/A';
 
-                        // Extraer número de turno (campo "turn" de la API)
-                        const turn = turnData.turn || result.turn || '-';
+                        // Extraer número de turno (campo "turn" de jsonDetails o directamente)
+                        const jsonDetails = turnData.jsonDetails || result.jsonDetails || {};
+                        const turn = jsonDetails.turn || turnData.turn || result.turn || '-';
 
-                        // Extraer nombre de la cola/servicio
-                        const queueService = turnData.queueName || result.queueName || 
-                                            turnData.queue?.name || result.queue?.name ||
-                                            turnData.serviceName || result.serviceName ||
-                                            'Sala VIP';
+                        // Trámite fijo
+                        const queueService = 'Ingreso a sala VIP';
 
-                        // Extraer sala de espera
-                        const waitingRoom = turnData.waitingRoom || result.waitingRoom ||
-                                          turnData.roomName || result.roomName ||
-                                          'Sala de espera 1';
+                        // Extraer turnos en espera (de branch.monitorInfo.waitingTurns)
+                        // La respuesta puede tener branch.monitorInfo o monitorInfo directamente
+                        const branch = result.branch || turnData.branch || {};
+                        const branchMonitorInfo = branch.monitorInfo || {};
+                        const monitorInfo = turnData.monitorInfo || result.monitorInfo || branchMonitorInfo || {};
+                        const waitingTurns = monitorInfo.waitingTurns !== undefined ? monitorInfo.waitingTurns :
+                                            branchMonitorInfo.waitingTurns !== undefined ? branchMonitorInfo.waitingTurns :
+                                            turnData.waitingTurns !== undefined ? turnData.waitingTurns :
+                                            result.waitingTurns !== undefined ? result.waitingTurns :
+                                            '-';
 
-                        // Extraer turnos en espera
-                        const waitingTurns = turnData.waitingTurns !== undefined ? turnData.waitingTurns :
-                                           result.waitingTurns !== undefined ? result.waitingTurns :
-                                           '-';
-
-                        // Extraer tiempo promedio de espera
-                        const avgWaitTime = turnData.averageWaitingTime || result.averageWaitingTime ||
-                                           turnData.averageWaitTime || result.averageWaitTime ||
-                                           '-';
+                        // Extraer tiempo promedio de espera (de jsonDetails.averageWaitingTime o monitorInfo.avgWaitingTime)
+                        let avgWaitTime = jsonDetails.averageWaitingTime || 
+                                         monitorInfo.avgWaitingTime ||
+                                         turnData.averageWaitingTime || 
+                                         result.averageWaitingTime ||
+                                         '-';
+                        
+                        // Convertir a minutos si es un número
+                        if (avgWaitTime !== '-' && !isNaN(avgWaitTime)) {
+                            const minutes = Math.floor(parseFloat(avgWaitTime));
+                            avgWaitTime = `${minutes} min`;
+                        }
 
                         // Extraer estado del turno y determinar el mensaje
                         const turnStatus = turnData.turnStatus || result.turnStatus || 
                                          turnData.status || result.status || 
-                                         'waiting';
+                                         'WAITING_TO_BE_CALLED';
                         
                         let statusText = '';
-                        if (turnStatus === 'calling' || turnStatus === 'being_called' || turnStatus === 'calling_now') {
+                        if (turnStatus === 'ANNOUNCED' || turnStatus === 'calling' || turnStatus === 'being_called') {
                             statusText = translations[currentLang].turnStatusCalling;
+                        } else if (turnStatus === 'WAITING_TO_BE_CALLED' || turnStatus === 'waiting') {
+                            statusText = translations[currentLang].turnStatusWaiting;
+                        } else if (turnStatus === 'FINALIZED' || turnStatus === 'finalized') {
+                            statusText = translations[currentLang].turnStatusFinalized || 'Atención finalizada';
                         } else {
                             statusText = translations[currentLang].turnStatusWaiting;
                         }
@@ -857,7 +877,6 @@
                             waitingTurns: waitingTurns,
                             averageWaitingTime: avgWaitTime,
                             queueName: queueService,
-                            waitingRoom: waitingRoom,
                             turnStatus: turnStatus
                         });
 
