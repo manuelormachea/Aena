@@ -624,6 +624,10 @@ body {
     gap: 10px;
 }
 
+.turn-info-cards-row:last-child {
+    grid-template-columns: 1fr;
+}
+
 .turn-info-card {
     background: var(--white);
     border: 1px solid var(--gray-border);
