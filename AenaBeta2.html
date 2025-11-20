@@ -433,6 +433,15 @@
 
             // Variable para el intervalo de polling
             let pollingInterval = null;
+            
+            // Variable para mantener el último valor válido de turnos en espera
+            let lastWaitingTurns = null;
+            
+            // Función para calcular turnos delante de mí (waitingTurns - 1)
+            function computeTurnsAhead(n) {
+                if (n === null || n === undefined || isNaN(n)) return null;
+                return Math.max(0, n - 1);
+            }
 
             function showMessage(text, type) {
                 if (!messageContainer || !messageBox) return;
@@ -513,9 +522,21 @@
             function updateTurnModal({ code, turn, waitingTurns, averageWaitingTime, queueName, turnStatus }) {
                 if (turnCodeDisplay && code) turnCodeDisplay.textContent = code;
                 if (turnNumberDisplay && turn) turnNumberDisplay.textContent = turn;
-                if (waitingTurnsDisplay && waitingTurns !== undefined && waitingTurns !== null) {
-                    waitingTurnsDisplay.textContent = waitingTurns;
+                
+                // Calcular turnos delante de mí (waitingTurns - 1)
+                const turnsAhead = computeTurnsAhead(waitingTurns);
+                
+                if (waitingTurnsDisplay) {
+                    if (turnsAhead !== null) {
+                        waitingTurnsDisplay.textContent = turnsAhead;
+                        lastWaitingTurns = turnsAhead; // Guardar el último valor válido
+                    } else if (lastWaitingTurns !== null) {
+                        // Si la API no trae valor nuevo, mantener el último
+                        waitingTurnsDisplay.textContent = lastWaitingTurns;
+                    }
+                    // Si tampoco hay lastWaitingTurns, dejar lo que hubiera en pantalla
                 }
+                
                 if (avgWaitTimeDisplay && averageWaitingTime) avgWaitTimeDisplay.textContent = averageWaitingTime;
                 if (queueServiceDisplay && queueName) queueServiceDisplay.textContent = queueName;
                 
@@ -593,11 +614,17 @@
                         const turn = jsonDetails.turn || turnData.turn || '-';
 
                         // Extraer turnos en espera (de branch.monitorInfo.waitingTurns o monitorInfo.waitingTurns)
-                        const waitingTurns = branchMonitorInfo.waitingTurns !== undefined ? branchMonitorInfo.waitingTurns :
-                                           monitorInfo.waitingTurns !== undefined ? monitorInfo.waitingTurns :
-                                           turnData.waitingTurns !== undefined ? turnData.waitingTurns :
-                                           data.waitingTurns !== undefined ? data.waitingTurns :
-                                           '-';
+                        // Se pasará a updateTurnModal que calculará waitingTurns - 1
+                        let waitingTurns = null;
+                        if (branchMonitorInfo.waitingTurns !== undefined && branchMonitorInfo.waitingTurns !== null) {
+                            waitingTurns = branchMonitorInfo.waitingTurns;
+                        } else if (monitorInfo.waitingTurns !== undefined && monitorInfo.waitingTurns !== null) {
+                            waitingTurns = monitorInfo.waitingTurns;
+                        } else if (turnData.waitingTurns !== undefined && turnData.waitingTurns !== null) {
+                            waitingTurns = turnData.waitingTurns;
+                        } else if (data.waitingTurns !== undefined && data.waitingTurns !== null) {
+                            waitingTurns = data.waitingTurns;
+                        }
 
                         // Actualizar tiempo promedio de espera (de jsonDetails.averageWaitingTime o monitorInfo.avgWaitingTime)
                         let avgWait = jsonDetails.averageWaitingTime || 
@@ -835,11 +862,17 @@
                         const branch = result.branch || turnData.branch || {};
                         const branchMonitorInfo = branch.monitorInfo || {};
                         const monitorInfo = turnData.monitorInfo || result.monitorInfo || branchMonitorInfo || {};
-                        const waitingTurns = monitorInfo.waitingTurns !== undefined ? monitorInfo.waitingTurns :
-                                            branchMonitorInfo.waitingTurns !== undefined ? branchMonitorInfo.waitingTurns :
-                                            turnData.waitingTurns !== undefined ? turnData.waitingTurns :
-                                            result.waitingTurns !== undefined ? result.waitingTurns :
-                                            '-';
+                        // Extraer waitingTurns para pasar a updateTurnModal (que calculará Math.max(0, waitingTurns - 1))
+                        let waitingTurns = null;
+                        if (branchMonitorInfo.waitingTurns !== undefined && branchMonitorInfo.waitingTurns !== null) {
+                            waitingTurns = branchMonitorInfo.waitingTurns;
+                        } else if (monitorInfo.waitingTurns !== undefined && monitorInfo.waitingTurns !== null) {
+                            waitingTurns = monitorInfo.waitingTurns;
+                        } else if (turnData.waitingTurns !== undefined && turnData.waitingTurns !== null) {
+                            waitingTurns = turnData.waitingTurns;
+                        } else if (result.waitingTurns !== undefined && result.waitingTurns !== null) {
+                            waitingTurns = result.waitingTurns;
+                        }
 
                         // Extraer tiempo promedio de espera (de jsonDetails.averageWaitingTime o monitorInfo.avgWaitingTime)
                         let avgWaitTime = jsonDetails.averageWaitingTime || 
