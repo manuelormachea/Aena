@@ -6,6 +6,7 @@
     <title>Aena - Reserva Sala VIP</title>
     <link rel="icon" type="image/png" href="images/Aena_Logo_New.svg.png">
     <link rel="stylesheet" href="widget.css">
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 </head>
 <body>
     <div class="widget-container">
@@ -136,6 +137,11 @@
                         <span class="checkbox-text" data-i18n="acceptTerms">Acepto los Términos y Condiciones de Aena</span>
                     </label>
                 </div>
+            </div>
+
+            <!-- reCAPTCHA -->
+            <div class="form-group">
+                <div class="g-recaptcha" data-sitekey="6Lf_5xcsAAAAABOzq-w4d94XVKtA1y4yPuy76kQd"></div>
             </div>
 
             <!-- Botón de envío -->
@@ -282,6 +288,7 @@
                     errorSelectTerminal: 'Selecciona una terminal válida.',
                     errorSelectSala: 'Selecciona una Sala VIP.',
                     errorSelectIdioma: 'Selecciona un idioma.',
+                    recaptchaError: 'Por favor, completa el reCAPTCHA para continuar.',
                     successMessage: 'Tu turno presencial ha sido generado. Revisa tu correo con los detalles.',
                     errorMessage: 'Hubo un problema al generar tu turno. Inténtalo de nuevo.'
                 },
@@ -330,6 +337,7 @@
                     errorSelectTerminal: 'Please select a valid terminal.',
                     errorSelectSala: 'Please select a VIP Lounge.',
                     errorSelectIdioma: 'Please select a language.',
+                    recaptchaError: 'Please complete the reCAPTCHA to continue.',
                     successMessage: 'Your in-person turn has been generated. Check your email for details.',
                     errorMessage: 'There was a problem generating your turn. Please try again.'
                 }
@@ -648,6 +656,10 @@
                         // Resetear el formulario y ocultar mensajes
                         if (form) {
                             form.reset();
+                            // Resetear reCAPTCHA
+                            if (typeof grecaptcha !== 'undefined') {
+                                grecaptcha.reset();
+                            }
                         }
                         hideMessage();
 
@@ -679,6 +691,13 @@
 
                     if (!form.checkValidity()) {
                         form.reportValidity();
+                        return;
+                    }
+
+                    // Validar reCAPTCHA
+                    const recaptchaResponse = grecaptcha.getResponse();
+                    if (!recaptchaResponse) {
+                        showMessage(translations[currentLang].recaptchaError, 'error');
                         return;
                     }
 
