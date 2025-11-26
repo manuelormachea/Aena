@@ -23,7 +23,7 @@
                 <select id="idioma" name="idioma" class="form-control" required>
                     <option value="">Seleccione un idioma</option>
                     <option value="es">Español</option>
-                    <option value="en">Inglés</option>
+                    <option value="en">English</option>
                 </select>
             </div>
 
@@ -364,6 +364,34 @@
 
             const form              = document.getElementById('reservationForm');
             const idiomaSelect      = document.getElementById('idioma');
+            const sucursalSelect    = document.getElementById('sucursal');
+            
+            // Function to update terminal options based on language
+            function updateTerminalOptions(lang) {
+                if (!sucursalSelect) return;
+                
+                const currentValue = sucursalSelect.value;
+                
+                // Get all option elements except the first one (placeholder)
+                const options = sucursalSelect.querySelectorAll('option');
+                const t1Option = options[1]; // barajas-t1
+                const t4sOption = options[2]; // neptuno-t4s
+                
+                if (lang === 'en') {
+                    // English options
+                    if (t1Option) t1Option.textContent = 'Barajas T1 - Cibeles VIP Lounge';
+                    if (t4sOption) t4sOption.textContent = 'Barajas T4s - Neptuno VIP Lounge';
+                } else {
+                    // Spanish options
+                    if (t1Option) t1Option.textContent = 'Barajas T1 - Sala VIP Cibeles';
+                    if (t4sOption) t4sOption.textContent = 'Barajas T4s - Sala VIP Neptuno';
+                }
+                
+                // Restore the selected value if it was set
+                if (currentValue) {
+                    sucursalSelect.value = currentValue;
+                }
+            }
             
             // Language select event listener
             if (idiomaSelect) {
@@ -371,10 +399,10 @@
                     const selectedLang = e.target.value;
                     if (selectedLang === 'es' || selectedLang === 'en') {
                         switchLanguage(selectedLang);
+                        updateTerminalOptions(selectedLang);
                     }
                 });
             }
-            const sucursalSelect    = document.getElementById('sucursal');
             const codigoPaisInput   = document.getElementById('codigoPais');
             const telefonoInput     = document.getElementById('telefono');
             const acompanantesInput = document.getElementById('acompanantes');
