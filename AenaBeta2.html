@@ -6,24 +6,24 @@
     <title>Aena - Reserva Sala VIP</title>
     <link rel="icon" type="image/png" href="images/Aena_Logo_New.svg.png">
     <link rel="stylesheet" href="widget.css">
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 </head>
 <body>
     <div class="widget-container">
         <div class="widget-header">
             <div class="logo-container">
-                <img src="images/logo_aena_es.svg" alt="Aena Logo" class="logo-img">
+                <img src="images/Aena_Vip_RGB_ESP.png" alt="Aena Logo" class="logo-img">
             </div>
-            <h1 class="widget-title" data-i18n="title">Reserva Sala VIP</h1>
         </div>
 
         <form id="reservationForm" class="reservation-form">
             <!-- Idioma -->
             <div class="form-group">
-                <label for="idioma" data-i18n="idiomaLabel">Idioma</label>
+                <label for="idioma">Idioma/Language</label>
                 <select id="idioma" name="idioma" class="form-control" required>
-                    <option value="" data-i18n="selectIdioma">Selecciona un idioma</option>
-                    <option value="es" data-i18n="idiomaEsp">Español</option>
-                    <option value="en" data-i18n="idiomaEn">Inglés</option>
+                    <option value="">Seleccione un idioma</option>
+                    <option value="es">Español</option>
+                    <option value="en">English</option>
                 </select>
             </div>
 
@@ -31,18 +31,9 @@
             <div class="form-group">
                 <label for="sucursal" data-i18n="terminal">Terminal</label>
                 <select id="sucursal" name="sucursal" class="form-control" required>
-                    <option value="" data-i18n="selectTerminal">Selecciona una terminal</option>
-                    <option value="barajas-t1">Barajas Sala VIP T1</option>
-                    <option value="neptuno-t4s">Barajas Sala VIP Neptuno T4S</option>
-                </select>
-            </div>
-
-            <!-- Sala VIP -->
-            <div class="form-group">
-                <label for="salaVIP" data-i18n="salaVIP">Sala VIP</label>
-                <select id="salaVIP" name="salaVIP" class="form-control" required>
-                    <option value="" data-i18n="selectSala">Selecciona una sala</option>
-                    <option value="sala-vip" data-i18n="salaVIPOption">Sala VIP</option>
+                    <option value="" data-i18n="selectTerminal">Seleccione una terminal</option>
+                    <option value="barajas-t1">Barajas T1 - Sala VIP Cibeles</option>
+                    <option value="neptuno-t4s">Barajas T4s - Sala VIP Neptuno</option>
                 </select>
             </div>
 
@@ -104,15 +95,15 @@
                         <option value="+966">+966 (Arabia Saudí)</option>
                         <option value="+971">+971 (Emiratos Árabes)</option>
                     </select>
-                    <input type="tel" id="telefono" name="telefono" class="form-control phone-number" placeholder="123456789" required>
+                    <input type="tel" id="telefono" name="telefono" class="form-control phone-number" placeholder="123 456 789" required>
                 </div>
             </div>
 
-            <!-- Cantidad de Personas -->
+            <!-- Cantidad de Pasajeros -->
             <div class="form-group">
-                <label for="acompanantes" data-i18n="cantidadPersonas">Cantidad de Personas</label>
+                <label for="acompanantes" data-i18n="cantidadPersonas">Cantidad de pasajeros</label>
                 <input type="number" id="acompanantes" name="acompanantes" class="form-control" min="0" max="10" value="0" required>
-                <small class="form-help" data-i18n="helpPersonas">Número de personas que te acompañarán (incluyéndote a ti)</small>
+                <small class="form-help" data-i18n="helpPersonas">Número de pasajeros que desean ingresar (incluyéndote a ti)</small>
             </div>
 
             <!-- Email -->
@@ -125,12 +116,10 @@
             <div class="legal-links">
                 <p class="legal-text" data-i18n="legalText">Al continuar, aceptas nuestras políticas:</p>
                 <div class="legal-links-container">
-                    <a href="https://web.numia.co/politica-de-privacidad-de-datos?_gl=1*14hdwaa*_gcl_au*MTY0MzUzMzYyMS4xNzYxNjc1NjMx" target="_blank" class="legal-link" data-i18n="privacyNumia">Política de privacidad de datos de Numia</a>
-                    <a href="https://web.numia.co/politica-de-calidad-y-seguridad?_gl=1*11nykri*_gcl_au*MTY0MzUzMzYyMS4xNzYxNjc1NjMx" target="_blank" class="legal-link" data-i18n="qualitySecurity">Política de Calidad y Seguridad</a>
-                    <a href="https://www.aena.es/es/politica-de-privacidad.html" target="_blank" class="legal-link" data-i18n="privacyAena">Política de Privacidad Aena</a>
+                    <a href="https://web.numia.co/politica-de-privacidad-de-datos?_gl=1*14hdwaa*_gcl_au*MTY0MzUzMzYyMS4xNzYxNjc1NjMx" target="_blank" class="legal-link" data-i18n="privacyNumia">Política de privacidad de Numia</a>
                 </div>
                 <div class="terms-button-container">
-                    <button type="button" class="btn-terms" id="openTermsBtn" data-i18n="viewTerms">Ver Términos y Condiciones de Aena</button>
+                    <button type="button" class="btn-terms" id="openTermsBtn" data-i18n="viewTerms">Vea Términos y Condiciones de Aena</button>
                 </div>
                 <div class="terms-checkbox-container">
                     <label class="checkbox-label">
@@ -138,6 +127,11 @@
                         <span class="checkbox-text" data-i18n="acceptTerms">Acepto los Términos y Condiciones de Aena</span>
                     </label>
                 </div>
+            </div>
+
+            <!-- reCAPTCHA -->
+            <div class="form-group">
+                <div class="g-recaptcha" data-sitekey="6LexAhgsAAAAANc5FRiF2HxYSTpgPmTR-97E6vv7"></div>
             </div>
 
             <!-- Botón de envío -->
@@ -221,22 +215,10 @@
                             </div>
                         </div>
 
-                        <div class="turn-info-cards-row">
-                            <div class="turn-info-card">
-                                <span class="turn-info-card-label" data-i18n="waitingTurnsLabel">Turnos en espera:</span>
-                                <span class="turn-info-card-value" id="waitingTurnsDisplay">-</span>
-                            </div>
-                            <div class="turn-info-card">
-                                <span class="turn-info-card-label" data-i18n="avgWaitTimeLabel">Tiempo Promedio de Espera:</span>
-                                <span class="turn-info-card-value" id="avgWaitTimeDisplay">-</span>
-                            </div>
-                        </div>
-
-                        <div class="turn-info-cards-row">
-                            <div class="turn-info-card">
-                                <span class="turn-info-card-label" data-i18n="tramiteLabel">Trámite:</span>
-                                <span class="turn-info-card-value" id="queueServiceDisplay">-</span>
-                            </div>
+                        <!-- Terminal Card -->
+                        <div class="turn-info-card turn-info-card-full">
+                            <span class="turn-info-card-label" data-i18n="terminalLabel">Terminal:</span>
+                            <span class="turn-info-card-value" id="terminalDisplay">-</span>
                         </div>
                     </div>
 
@@ -260,55 +242,52 @@
                 es: {
                     title: 'Reserva Sala VIP',
                     terminal: 'Terminal',
-                    selectTerminal: 'Selecciona una terminal',
+                    selectTerminal: 'Seleccione una terminal',
                     salaVIP: 'Sala VIP',
-                    selectSala: 'Selecciona una sala',
+                    selectSala: 'Seleccione una sala',
                     salaVIPOption: 'Sala VIP',
                     nombre: 'Nombre',
                     apellido: 'Apellido',
                     telefono: 'Teléfono',
-                    cantidadPersonas: 'Cantidad de Personas',
-                    helpPersonas: 'Número de personas que te acompañarán (incluyéndote a ti)',
+                    cantidadPersonas: 'Cantidad de pasajeros',
+                    helpPersonas: 'Número de pasajeros que desean ingresar (incluyéndote a ti)',
                     email: 'Email',
                     legalText: 'Al continuar, aceptas nuestras políticas:',
-                    privacyNumia: 'Política de privacidad de datos de Numia',
-                    qualitySecurity: 'Política de Calidad y Seguridad',
-                    privacyAena: 'Política de Privacidad Aena',
-                    viewTerms: 'Ver Términos y Condiciones de Aena',
+                    privacyNumia: 'Política de privacidad de Numia',
+                    viewTerms: 'Vea Términos y Condiciones de Aena',
                     acceptTerms: 'Acepto los Términos y Condiciones de Aena',
                     reservar: 'Reservar',
                     modalTermsTitle: 'Términos y Condiciones de Aena',
                     turnGenerated: 'Turno Generado',
-                    waitingMessage: 'Tu turno ha sido encolado. Esperando confirmación...',
+                    waitingMessage: 'Su turno ha sido encolado. Esperando confirmación...',
                     cancelar: 'Cancelar',
                     turnGeneratedTitle: 'Turno Generado!',
-                    reserveTurnTitle: 'RESERVA TU TURNO',
+                    reserveTurnTitle: 'RESERVE SU TURNO',
                     turnReservedSuccess: 'Turno Reservado Exitosamente',
-                    turnGeneratedMessage: '¡Tu turno ha sido generado en el sistema!',
+                    turnGeneratedMessage: '¡Su turno ha sido generado en el sistema!',
                     turnCodeLabel: 'Código del Turno:',
                     turnLabel: 'Turno:',
                     turnStatusLabel: 'Estado del Turno:',
+                    terminalLabel: 'Terminal:',
                     turnStatusValue: 'En breve lo llamaremos',
-                    waitingTurnsLabel: 'Turnos en espera:',
-                    avgWaitTimeLabel: 'Tiempo Promedio de Espera:',
-                    tramiteLabel: 'Trámite:',
                     turnStatusWaiting: 'En breve lo llamaremos',
                     turnStatusCalling: 'Lo estamos llamando',
                     turnStatusFinalized: 'Atención finalizada',
                     turnStatusError: 'Error al consultar',
                     cancelTurn: 'Cancelar mi turno',
-                    cancelTurnConfirm: '¿Estás seguro de que deseas cancelar tu turno?',
-                    cancelTurnSuccess: 'Tu turno ha sido cancelado exitosamente.',
-                    cancelTurnError: 'Hubo un error al cancelar tu turno. Inténtalo de nuevo.',
+                    cancelTurnConfirm: '¿Está seguro de que desea cancelar su turno?',
+                    cancelTurnSuccess: 'Su turno ha sido cancelado exitosamente.',
+                    cancelTurnError: 'Hubo un error al cancelar su turno. Inténtelo de nuevo.',
                     idiomaLabel: 'Idioma',
-                    selectIdioma: 'Selecciona un idioma',
+                    selectIdioma: 'Seleccione un idioma',
                     idiomaEsp: 'Español',
                     idiomaEn: 'Inglés',
-                    errorSelectTerminal: 'Selecciona una terminal válida.',
-                    errorSelectSala: 'Selecciona una Sala VIP.',
-                    errorSelectIdioma: 'Selecciona un idioma.',
-                    successMessage: 'Tu turno presencial ha sido generado. Revisa tu correo con los detalles.',
-                    errorMessage: 'Hubo un problema al generar tu turno. Inténtalo de nuevo.'
+                    errorSelectTerminal: 'Seleccione una terminal válida.',
+                    errorSelectSala: 'Seleccione una Sala VIP.',
+                    errorSelectIdioma: 'Seleccione un idioma.',
+                    recaptchaError: 'Por favor, complete el reCAPTCHA para continuar.',
+                    successMessage: 'Su turno presencial ha sido generado. Revise su correo con los detalles.',
+                    errorMessage: 'Hubo un problema al generar su turno. Inténtelo de nuevo.'
                 },
                 en: {
                     title: 'VIP Lounge Reservation',
@@ -320,13 +299,11 @@
                     nombre: 'First Name',
                     apellido: 'Last Name',
                     telefono: 'Phone',
-                    cantidadPersonas: 'Number of People',
-                    helpPersonas: 'Number of people accompanying you (including yourself)',
+                    cantidadPersonas: 'Number of Passengers',
+                    helpPersonas: 'Number of passengers who wish to enter (including yourself)',
                     email: 'Email',
                     legalText: 'By continuing, you accept our policies:',
-                    privacyNumia: 'Numia Data Privacy Policy',
-                    qualitySecurity: 'Quality and Security Policy',
-                    privacyAena: 'Aena Privacy Policy',
+                    privacyNumia: 'Numia Privacy Policy',
                     viewTerms: 'View Aena Terms and Conditions',
                     acceptTerms: 'I accept Aena Terms and Conditions',
                     reservar: 'Reserve',
@@ -341,16 +318,14 @@
                     turnCodeLabel: 'Turn Code:',
                     turnLabel: 'Turn:',
                     turnStatusLabel: 'Turn Status:',
+                    terminalLabel: 'Terminal:',
                     turnStatusValue: 'We will call you shortly',
-                    waitingTurnsLabel: 'Turns waiting:',
-                    avgWaitTimeLabel: 'Average Waiting Time:',
-                    tramiteLabel: 'Service:',
                     turnStatusWaiting: 'We will call you shortly',
                     turnStatusCalling: 'We are calling you',
                     turnStatusFinalized: 'Service completed',
                     turnStatusError: 'Error checking status',
                     cancelTurn: 'Cancel my turn',
-                    cancelTurnConfirm: 'Are you sure you want to cancel your turn?',
+                    cancelTurnConfirm: 'Are you certain you wish to cancel your turn?',
                     cancelTurnSuccess: 'Your turn has been successfully cancelled.',
                     cancelTurnError: 'There was an error cancelling your turn. Please try again.',
                     idiomaLabel: 'Language',
@@ -360,6 +335,7 @@
                     errorSelectTerminal: 'Please select a valid terminal.',
                     errorSelectSala: 'Please select a VIP Lounge.',
                     errorSelectIdioma: 'Please select a language.',
+                    recaptchaError: 'Please complete the reCAPTCHA to continue.',
                     successMessage: 'Your in-person turn has been generated. Check your email for details.',
                     errorMessage: 'There was a problem generating your turn. Please try again.'
                 }
@@ -388,6 +364,34 @@
 
             const form              = document.getElementById('reservationForm');
             const idiomaSelect      = document.getElementById('idioma');
+            const sucursalSelect    = document.getElementById('sucursal');
+            
+            // Function to update terminal options based on language
+            function updateTerminalOptions(lang) {
+                if (!sucursalSelect) return;
+                
+                const currentValue = sucursalSelect.value;
+                
+                // Get all option elements except the first one (placeholder)
+                const options = sucursalSelect.querySelectorAll('option');
+                const t1Option = options[1]; // barajas-t1
+                const t4sOption = options[2]; // neptuno-t4s
+                
+                if (lang === 'en') {
+                    // English options
+                    if (t1Option) t1Option.textContent = 'Barajas T1 - Cibeles VIP Lounge';
+                    if (t4sOption) t4sOption.textContent = 'Barajas T4s - Neptuno VIP Lounge';
+                } else {
+                    // Spanish options
+                    if (t1Option) t1Option.textContent = 'Barajas T1 - Sala VIP Cibeles';
+                    if (t4sOption) t4sOption.textContent = 'Barajas T4s - Sala VIP Neptuno';
+                }
+                
+                // Restore the selected value if it was set
+                if (currentValue) {
+                    sucursalSelect.value = currentValue;
+                }
+            }
             
             // Language select event listener
             if (idiomaSelect) {
@@ -395,11 +399,10 @@
                     const selectedLang = e.target.value;
                     if (selectedLang === 'es' || selectedLang === 'en') {
                         switchLanguage(selectedLang);
+                        updateTerminalOptions(selectedLang);
                     }
                 });
             }
-            const sucursalSelect    = document.getElementById('sucursal');
-            const salaVIPSelect     = document.getElementById('salaVIP');
             const codigoPaisInput   = document.getElementById('codigoPais');
             const telefonoInput     = document.getElementById('telefono');
             const acompanantesInput = document.getElementById('acompanantes');
@@ -424,24 +427,14 @@
             const turnSuccessModal  = document.getElementById('turnSuccessModal');
             const turnNumberDisplay = document.getElementById('turnNumberDisplay');
             const turnStatusDisplay = document.getElementById('turnStatusDisplay');
-            const waitingTurnsDisplay = document.getElementById('waitingTurnsDisplay');
-            const avgWaitTimeDisplay = document.getElementById('avgWaitTimeDisplay');
-            const queueServiceDisplay = document.getElementById('queueServiceDisplay');
             const turnCodeDisplay   = document.getElementById('turnCodeDisplay');
+            const terminalDisplay   = document.getElementById('terminalDisplay');
             const closeTurnSuccessModal = document.getElementById('closeTurnSuccessModal');
             const cancelTurnBtn     = document.getElementById('cancelTurnBtn');
 
             // Variable para el intervalo de polling
             let pollingInterval = null;
             
-            // Variable para mantener el último valor válido de turnos en espera
-            let lastWaitingTurns = null;
-            
-            // Función para calcular turnos delante de mí (waitingTurns - 1)
-            function computeTurnsAhead(n) {
-                if (n === null || n === undefined || isNaN(n)) return null;
-                return Math.max(0, n - 1);
-            }
 
             function showMessage(text, type) {
                 if (!messageContainer || !messageBox) return;
@@ -519,26 +512,14 @@
             }
 
             // Función para actualizar el modal con los datos del turno
-            function updateTurnModal({ code, turn, waitingTurns, averageWaitingTime, queueName, turnStatus }) {
+            function updateTurnModal({ code, turn, turnStatus, terminal }) {
                 if (turnCodeDisplay && code) turnCodeDisplay.textContent = code;
                 if (turnNumberDisplay && turn) turnNumberDisplay.textContent = turn;
                 
-                // Calcular turnos delante de mí (waitingTurns - 1)
-                const turnsAhead = computeTurnsAhead(waitingTurns);
-                
-                if (waitingTurnsDisplay) {
-                    if (turnsAhead !== null) {
-                        waitingTurnsDisplay.textContent = turnsAhead;
-                        lastWaitingTurns = turnsAhead; // Guardar el último valor válido
-                    } else if (lastWaitingTurns !== null) {
-                        // Si la API no trae valor nuevo, mantener el último
-                        waitingTurnsDisplay.textContent = lastWaitingTurns;
-                    }
-                    // Si tampoco hay lastWaitingTurns, dejar lo que hubiera en pantalla
+                // Actualizar terminal
+                if (terminalDisplay && terminal) {
+                    terminalDisplay.textContent = terminal;
                 }
-                
-                if (avgWaitTimeDisplay && averageWaitingTime) avgWaitTimeDisplay.textContent = averageWaitingTime;
-                if (queueServiceDisplay && queueName) queueServiceDisplay.textContent = queueName;
                 
                 // Actualizar estado del turno
                 if (turnStatusDisplay && turnStatus) {
@@ -613,43 +594,15 @@
                         // Extraer turno
                         const turn = jsonDetails.turn || turnData.turn || '-';
 
-                        // Extraer turnos en espera (de branch.monitorInfo.waitingTurns o monitorInfo.waitingTurns)
-                        // Se pasará a updateTurnModal que calculará waitingTurns - 1
-                        let waitingTurns = null;
-                        if (branchMonitorInfo.waitingTurns !== undefined && branchMonitorInfo.waitingTurns !== null) {
-                            waitingTurns = branchMonitorInfo.waitingTurns;
-                        } else if (monitorInfo.waitingTurns !== undefined && monitorInfo.waitingTurns !== null) {
-                            waitingTurns = monitorInfo.waitingTurns;
-                        } else if (turnData.waitingTurns !== undefined && turnData.waitingTurns !== null) {
-                            waitingTurns = turnData.waitingTurns;
-                        } else if (data.waitingTurns !== undefined && data.waitingTurns !== null) {
-                            waitingTurns = data.waitingTurns;
-                        }
-
-                        // Actualizar tiempo promedio de espera (de jsonDetails.averageWaitingTime o monitorInfo.avgWaitingTime)
-                        let avgWait = jsonDetails.averageWaitingTime || 
-                                     branchMonitorInfo.avgWaitingTime ||
-                                     monitorInfo.avgWaitingTime ||
-                                     turnData.averageWaitingTime || 
-                                     turnData.serviceTime;
-                        
-                        let avgWaitTimeFormatted = '-';
-                        if (avgWait !== undefined && avgWait !== null && !isNaN(avgWait)) {
-                            const avgMinutes = Math.floor(parseFloat(avgWait));
-                            avgWaitTimeFormatted = `${avgMinutes} min`;
-                        }
-
-                        // Trámite fijo
-                        const queueName = 'Ingreso a sala VIP';
+                        // Obtener el texto de la terminal seleccionada (mantener el valor original)
+                        const terminalText = sucursalSelect.options[sucursalSelect.selectedIndex]?.text || '-';
 
                         // Actualizar otros campos si están disponibles
                         updateTurnModal({
                             code: cleanCode,
                             turn: turn,
-                            waitingTurns: waitingTurns,
-                            averageWaitingTime: avgWaitTimeFormatted,
-                            queueName: queueName,
-                            turnStatus: status
+                            turnStatus: status,
+                            terminal: terminalText
                         });
 
                     } catch (e) {
@@ -738,6 +691,10 @@
                         // Resetear el formulario y ocultar mensajes
                         if (form) {
                             form.reset();
+                            // Resetear reCAPTCHA
+                            if (typeof grecaptcha !== 'undefined') {
+                                grecaptcha.reset();
+                            }
                         }
                         hideMessage();
 
@@ -772,8 +729,14 @@
                         return;
                     }
 
+                    // Validar reCAPTCHA
+                    const recaptchaResponse = grecaptcha.getResponse();
+                    if (!recaptchaResponse) {
+                        showMessage(translations[currentLang].recaptchaError, 'error');
+                        return;
+                    }
+
                     const sucursalVal = sucursalSelect.value;
-                    const salaVal     = salaVIPSelect.value;
                     const idiomaVal   = idiomaSelect ? idiomaSelect.value : 'es';
 
                     // Validar idioma
@@ -790,11 +753,6 @@
                     const branchId = mapSucursalToBranchId(sucursalVal);
                     if (!branchId) {
                         showMessage(translations[currentLang].errorSelectTerminal, 'error');
-                        return;
-                    }
-
-                    if (!salaVal) {
-                        showMessage(translations[currentLang].errorSelectSala, 'error');
                         return;
                     }
 
@@ -854,38 +812,9 @@
                         const jsonDetails = turnData.jsonDetails || result.jsonDetails || {};
                         const turn = jsonDetails.turn || turnData.turn || result.turn || '-';
 
-                        // Trámite fijo
-                        const queueService = 'Ingreso a sala VIP';
-
-                        // Extraer turnos en espera (de branch.monitorInfo.waitingTurns)
-                        // La respuesta puede tener branch.monitorInfo o monitorInfo directamente
                         const branch = result.branch || turnData.branch || {};
                         const branchMonitorInfo = branch.monitorInfo || {};
                         const monitorInfo = turnData.monitorInfo || result.monitorInfo || branchMonitorInfo || {};
-                        // Extraer waitingTurns para pasar a updateTurnModal (que calculará Math.max(0, waitingTurns - 1))
-                        let waitingTurns = null;
-                        if (branchMonitorInfo.waitingTurns !== undefined && branchMonitorInfo.waitingTurns !== null) {
-                            waitingTurns = branchMonitorInfo.waitingTurns;
-                        } else if (monitorInfo.waitingTurns !== undefined && monitorInfo.waitingTurns !== null) {
-                            waitingTurns = monitorInfo.waitingTurns;
-                        } else if (turnData.waitingTurns !== undefined && turnData.waitingTurns !== null) {
-                            waitingTurns = turnData.waitingTurns;
-                        } else if (result.waitingTurns !== undefined && result.waitingTurns !== null) {
-                            waitingTurns = result.waitingTurns;
-                        }
-
-                        // Extraer tiempo promedio de espera (de jsonDetails.averageWaitingTime o monitorInfo.avgWaitingTime)
-                        let avgWaitTime = jsonDetails.averageWaitingTime || 
-                                         monitorInfo.avgWaitingTime ||
-                                         turnData.averageWaitingTime || 
-                                         result.averageWaitingTime ||
-                                         '-';
-                        
-                        // Convertir a minutos si es un número
-                        if (avgWaitTime !== '-' && !isNaN(avgWaitTime)) {
-                            const minutes = Math.floor(parseFloat(avgWaitTime));
-                            avgWaitTime = `${minutes} min`;
-                        }
 
                         // Extraer estado del turno y determinar el mensaje
                         const turnStatus = turnData.turnStatus || result.turnStatus || 
@@ -903,14 +832,15 @@
                             statusText = translations[currentLang].turnStatusWaiting;
                         }
 
+                        // Obtener el texto de la terminal seleccionada
+                        const terminalText = sucursalSelect.options[sucursalSelect.selectedIndex]?.text || '-';
+
                         // Actualizar el modal con los datos iniciales
                         updateTurnModal({
                             code: turnCode,
                             turn: turn,
-                            waitingTurns: waitingTurns,
-                            averageWaitingTime: avgWaitTime,
-                            queueName: queueService,
-                            turnStatus: turnStatus
+                            turnStatus: turnStatus,
+                            terminal: terminalText
                         });
 
                         if (turnSuccessModal) {
