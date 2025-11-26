@@ -12,9 +12,8 @@
     <div class="widget-container">
         <div class="widget-header">
             <div class="logo-container">
-                <img src="images/logo_aena_es.svg" alt="Aena Logo" class="logo-img">
+                <img src="images/Aena_Vip_RGB_ESP.png" alt="Aena Logo" class="logo-img">
             </div>
-            <h1 class="widget-title" data-i18n="title">Reserva Sala VIP</h1>
         </div>
 
         <form id="reservationForm" class="reservation-form">
@@ -22,7 +21,7 @@
             <div class="form-group">
                 <label for="idioma" data-i18n="idiomaLabel">Idioma</label>
                 <select id="idioma" name="idioma" class="form-control" required>
-                    <option value="" data-i18n="selectIdioma">Selecciona un idioma</option>
+                    <option value="" data-i18n="selectIdioma">Seleccione un idioma</option>
                     <option value="es" data-i18n="idiomaEsp">Español</option>
                     <option value="en" data-i18n="idiomaEn">Inglés</option>
                 </select>
@@ -32,7 +31,7 @@
             <div class="form-group">
                 <label for="sucursal" data-i18n="terminal">Terminal</label>
                 <select id="sucursal" name="sucursal" class="form-control" required>
-                    <option value="" data-i18n="selectTerminal">Selecciona una terminal</option>
+                    <option value="" data-i18n="selectTerminal">Seleccione una terminal</option>
                     <option value="barajas-t1">Barajas T1</option>
                     <option value="neptuno-t4s">Barajas Neptuno T4S</option>
                 </select>
@@ -42,7 +41,7 @@
             <div class="form-group">
                 <label for="salaVIP" data-i18n="salaVIP">Sala VIP</label>
                 <select id="salaVIP" name="salaVIP" class="form-control" required>
-                    <option value="" data-i18n="selectSala">Selecciona una sala</option>
+                    <option value="" data-i18n="selectSala">Seleccione una sala</option>
                     <option value="sala-vip" data-i18n="salaVIPOption">Sala VIP</option>
                 </select>
             </div>
@@ -105,7 +104,7 @@
                         <option value="+966">+966 (Arabia Saudí)</option>
                         <option value="+971">+971 (Emiratos Árabes)</option>
                     </select>
-                    <input type="tel" id="telefono" name="telefono" class="form-control phone-number" placeholder="123456789" required>
+                    <input type="tel" id="telefono" name="telefono" class="form-control phone-number" placeholder="123 456 789" required>
                 </div>
             </div>
 
@@ -124,12 +123,12 @@
 
             <!-- Políticas legales -->
             <div class="legal-links">
-                <p class="legal-text" data-i18n="legalText">Al continuar, aceptas nuestras políticas:</p>
+                <p class="legal-text" data-i18n="legalText">Al continuar, acepta nuestras políticas:</p>
                 <div class="legal-links-container">
                     <a href="https://web.numia.co/politica-de-privacidad-de-datos?_gl=1*14hdwaa*_gcl_au*MTY0MzUzMzYyMS4xNzYxNjc1NjMx" target="_blank" class="legal-link" data-i18n="privacyNumia">Política de privacidad de Numia</a>
                 </div>
                 <div class="terms-button-container">
-                    <button type="button" class="btn-terms" id="openTermsBtn" data-i18n="viewTerms">Ver Términos y Condiciones de Aena</button>
+                    <button type="button" class="btn-terms" id="openTermsBtn" data-i18n="viewTerms">Vea Términos y Condiciones de Aena</button>
                 </div>
                 <div class="terms-checkbox-container">
                     <label class="checkbox-label">
@@ -146,7 +145,7 @@
 
             <!-- Botón de envío -->
             <button type="submit" class="btn btn-primary" id="submitBtn">
-                <span class="btn-text" id="btnText" data-i18n="reservar">Reservar</span>
+                <span class="btn-text" id="btnText" data-i18n="reservar">Reserve</span>
                 <span class="btn-loader" id="btnLoader" style="display: none;">⏳</span>
             </button>
         </form>
@@ -246,29 +245,29 @@
                 es: {
                     title: 'Reserva Sala VIP',
                     terminal: 'Terminal',
-                    selectTerminal: 'Selecciona una terminal',
+                    selectTerminal: 'Seleccione una terminal',
                     salaVIP: 'Sala VIP',
-                    selectSala: 'Selecciona una sala',
+                    selectSala: 'Seleccione una sala',
                     salaVIPOption: 'Sala VIP',
                     nombre: 'Nombre',
                     apellido: 'Apellido',
                     telefono: 'Teléfono',
                     cantidadPersonas: 'Cantidad de Personas',
-                    helpPersonas: 'Número de personas que te acompañarán (incluyéndote a ti)',
+                    helpPersonas: 'Número de personas que le acompañarán (incluyéndole a usted)',
                     email: 'Email',
-                    legalText: 'Al continuar, aceptas nuestras políticas:',
+                    legalText: 'Al continuar, acepta nuestras políticas:',
                     privacyNumia: 'Política de privacidad de Numia',
-                    viewTerms: 'Ver Términos y Condiciones de Aena',
+                    viewTerms: 'Vea Términos y Condiciones de Aena',
                     acceptTerms: 'Acepto los Términos y Condiciones de Aena',
-                    reservar: 'Reservar',
+                    reservar: 'Reserve',
                     modalTermsTitle: 'Términos y Condiciones de Aena',
                     turnGenerated: 'Turno Generado',
-                    waitingMessage: 'Tu turno ha sido encolado. Esperando confirmación...',
+                    waitingMessage: 'Su turno ha sido encolado. Esperando confirmación...',
                     cancelar: 'Cancelar',
                     turnGeneratedTitle: 'Turno Generado!',
-                    reserveTurnTitle: 'RESERVA TU TURNO',
+                    reserveTurnTitle: 'RESERVE SU TURNO',
                     turnReservedSuccess: 'Turno Reservado Exitosamente',
-                    turnGeneratedMessage: '¡Tu turno ha sido generado en el sistema!',
+                    turnGeneratedMessage: '¡Su turno ha sido generado en el sistema!',
                     turnCodeLabel: 'Código del Turno:',
                     turnLabel: 'Turno:',
                     turnStatusLabel: 'Estado del Turno:',
@@ -278,19 +277,19 @@
                     turnStatusFinalized: 'Atención finalizada',
                     turnStatusError: 'Error al consultar',
                     cancelTurn: 'Cancelar mi turno',
-                    cancelTurnConfirm: '¿Estás seguro de que deseas cancelar tu turno?',
-                    cancelTurnSuccess: 'Tu turno ha sido cancelado exitosamente.',
-                    cancelTurnError: 'Hubo un error al cancelar tu turno. Inténtalo de nuevo.',
+                    cancelTurnConfirm: '¿Está seguro de que desea cancelar su turno?',
+                    cancelTurnSuccess: 'Su turno ha sido cancelado exitosamente.',
+                    cancelTurnError: 'Hubo un error al cancelar su turno. Inténtelo de nuevo.',
                     idiomaLabel: 'Idioma',
-                    selectIdioma: 'Selecciona un idioma',
+                    selectIdioma: 'Seleccione un idioma',
                     idiomaEsp: 'Español',
                     idiomaEn: 'Inglés',
-                    errorSelectTerminal: 'Selecciona una terminal válida.',
-                    errorSelectSala: 'Selecciona una Sala VIP.',
-                    errorSelectIdioma: 'Selecciona un idioma.',
-                    recaptchaError: 'Por favor, completa el reCAPTCHA para continuar.',
-                    successMessage: 'Tu turno presencial ha sido generado. Revisa tu correo con los detalles.',
-                    errorMessage: 'Hubo un problema al generar tu turno. Inténtalo de nuevo.'
+                    errorSelectTerminal: 'Seleccione una terminal válida.',
+                    errorSelectSala: 'Seleccione una Sala VIP.',
+                    errorSelectIdioma: 'Seleccione un idioma.',
+                    recaptchaError: 'Por favor, complete el reCAPTCHA para continuar.',
+                    successMessage: 'Su turno presencial ha sido generado. Revise su correo con los detalles.',
+                    errorMessage: 'Hubo un problema al generar su turno. Inténtelo de nuevo.'
                 },
                 en: {
                     title: 'VIP Lounge Reservation',
@@ -327,7 +326,7 @@
                     turnStatusFinalized: 'Service completed',
                     turnStatusError: 'Error checking status',
                     cancelTurn: 'Cancel my turn',
-                    cancelTurnConfirm: 'Are you sure you want to cancel your turn?',
+                    cancelTurnConfirm: 'Are you certain you wish to cancel your turn?',
                     cancelTurnSuccess: 'Your turn has been successfully cancelled.',
                     cancelTurnError: 'There was an error cancelling your turn. Please try again.',
                     idiomaLabel: 'Language',
