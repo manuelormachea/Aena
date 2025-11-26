@@ -19,11 +19,11 @@
         <form id="reservationForm" class="reservation-form">
             <!-- Idioma -->
             <div class="form-group">
-                <label for="idioma" data-i18n="idiomaLabel">Idioma</label>
+                <label for="idioma">Idioma/Language</label>
                 <select id="idioma" name="idioma" class="form-control" required>
-                    <option value="" data-i18n="selectIdioma">Seleccione un idioma</option>
-                    <option value="es" data-i18n="idiomaEsp">Español</option>
-                    <option value="en" data-i18n="idiomaEn">Inglés</option>
+                    <option value="">Seleccione un idioma</option>
+                    <option value="es">Español</option>
+                    <option value="en">Inglés</option>
                 </select>
             </div>
 
@@ -32,17 +32,8 @@
                 <label for="sucursal" data-i18n="terminal">Terminal</label>
                 <select id="sucursal" name="sucursal" class="form-control" required>
                     <option value="" data-i18n="selectTerminal">Seleccione una terminal</option>
-                    <option value="barajas-t1">Barajas T1</option>
-                    <option value="neptuno-t4s">Barajas Neptuno T4S</option>
-                </select>
-            </div>
-
-            <!-- Sala VIP -->
-            <div class="form-group">
-                <label for="salaVIP" data-i18n="salaVIP">Sala VIP</label>
-                <select id="salaVIP" name="salaVIP" class="form-control" required>
-                    <option value="" data-i18n="selectSala">Seleccione una sala</option>
-                    <option value="sala-vip" data-i18n="salaVIPOption">Sala VIP</option>
+                    <option value="barajas-t1">Barajas Sala VIP Cibeles T1</option>
+                    <option value="neptuno-t4s">Barajas Sala VIP Neptuno T4s</option>
                 </select>
             </div>
 
@@ -108,11 +99,11 @@
                 </div>
             </div>
 
-            <!-- Cantidad de Personas -->
+            <!-- Cantidad de Pasajeros -->
             <div class="form-group">
-                <label for="acompanantes" data-i18n="cantidadPersonas">Cantidad de Personas</label>
+                <label for="acompanantes" data-i18n="cantidadPersonas">Cantidad de pasajeros</label>
                 <input type="number" id="acompanantes" name="acompanantes" class="form-control" min="0" max="10" value="0" required>
-                <small class="form-help" data-i18n="helpPersonas">Número de personas que te acompañarán (incluyéndote a ti)</small>
+                <small class="form-help" data-i18n="helpPersonas">Número de pasajeros que lo acompañarán (incluyéndolo a usted)</small>
             </div>
 
             <!-- Email -->
@@ -123,7 +114,7 @@
 
             <!-- Políticas legales -->
             <div class="legal-links">
-                <p class="legal-text" data-i18n="legalText">Al continuar, acepta nuestras políticas:</p>
+                <p class="legal-text" data-i18n="legalText">Al continuar, aceptas nuestras políticas:</p>
                 <div class="legal-links-container">
                     <a href="https://web.numia.co/politica-de-privacidad-de-datos?_gl=1*14hdwaa*_gcl_au*MTY0MzUzMzYyMS4xNzYxNjc1NjMx" target="_blank" class="legal-link" data-i18n="privacyNumia">Política de privacidad de Numia</a>
                 </div>
@@ -252,10 +243,10 @@
                     nombre: 'Nombre',
                     apellido: 'Apellido',
                     telefono: 'Teléfono',
-                    cantidadPersonas: 'Cantidad de Personas',
-                    helpPersonas: 'Número de personas que le acompañarán (incluyéndole a usted)',
+                    cantidadPersonas: 'Cantidad de pasajeros',
+                    helpPersonas: 'Número de pasajeros que lo acompañarán (incluyéndolo a usted)',
                     email: 'Email',
-                    legalText: 'Al continuar, acepta nuestras políticas:',
+                    legalText: 'Al continuar, aceptas nuestras políticas:',
                     privacyNumia: 'Política de privacidad de Numia',
                     viewTerms: 'Vea Términos y Condiciones de Aena',
                     acceptTerms: 'Acepto los Términos y Condiciones de Aena',
@@ -301,8 +292,8 @@
                     nombre: 'First Name',
                     apellido: 'Last Name',
                     telefono: 'Phone',
-                    cantidadPersonas: 'Number of People',
-                    helpPersonas: 'Number of people accompanying you (including yourself)',
+                    cantidadPersonas: 'Number of Passengers',
+                    helpPersonas: 'Number of passengers accompanying you (including yourself)',
                     email: 'Email',
                     legalText: 'By continuing, you accept our policies:',
                     privacyNumia: 'Numia Privacy Policy',
@@ -376,7 +367,6 @@
                 });
             }
             const sucursalSelect    = document.getElementById('sucursal');
-            const salaVIPSelect     = document.getElementById('salaVIP');
             const codigoPaisInput   = document.getElementById('codigoPais');
             const telefonoInput     = document.getElementById('telefono');
             const acompanantesInput = document.getElementById('acompanantes');
@@ -701,7 +691,6 @@
                     }
 
                     const sucursalVal = sucursalSelect.value;
-                    const salaVal     = salaVIPSelect.value;
                     const idiomaVal   = idiomaSelect ? idiomaSelect.value : 'es';
 
                     // Validar idioma
@@ -718,11 +707,6 @@
                     const branchId = mapSucursalToBranchId(sucursalVal);
                     if (!branchId) {
                         showMessage(translations[currentLang].errorSelectTerminal, 'error');
-                        return;
-                    }
-
-                    if (!salaVal) {
-                        showMessage(translations[currentLang].errorSelectSala, 'error');
                         return;
                     }
 
