@@ -32,8 +32,8 @@
                 <label for="sucursal" data-i18n="terminal">Terminal</label>
                 <select id="sucursal" name="sucursal" class="form-control" required>
                     <option value="" data-i18n="selectTerminal">Seleccione una terminal</option>
-                    <option value="barajas-t1">Barajas Sala VIP Cibeles T1</option>
-                    <option value="neptuno-t4s">Barajas Sala VIP Neptuno T4s</option>
+                    <option value="barajas-t1">Barajas T1 - Sala VIP Cibeles</option>
+                    <option value="neptuno-t4s">Barajas T4s - Sala VIP Neptuno</option>
                 </select>
             </div>
 
@@ -214,6 +214,12 @@
                                 <span class="turn-info-card-value" data-i18n="turnStatusValue" id="turnStatusDisplay">En breve lo llamaremos</span>
                             </div>
                         </div>
+
+                        <!-- Terminal Card -->
+                        <div class="turn-info-card turn-info-card-full">
+                            <span class="turn-info-card-label" data-i18n="terminalLabel">Terminal:</span>
+                            <span class="turn-info-card-value" id="terminalDisplay">-</span>
+                        </div>
                     </div>
 
                     <!-- Cancel Button -->
@@ -244,7 +250,7 @@
                     apellido: 'Apellido',
                     telefono: 'Teléfono',
                     cantidadPersonas: 'Cantidad de pasajeros',
-                    helpPersonas: 'Número de pasajeros que lo acompañarán (incluyéndolo a usted)',
+                    helpPersonas: 'Número de pasajeros que lo acompañarán (incluyéndote a ti)',
                     email: 'Email',
                     legalText: 'Al continuar, aceptas nuestras políticas:',
                     privacyNumia: 'Política de privacidad de Numia',
@@ -262,6 +268,7 @@
                     turnCodeLabel: 'Código del Turno:',
                     turnLabel: 'Turno:',
                     turnStatusLabel: 'Estado del Turno:',
+                    terminalLabel: 'Terminal:',
                     turnStatusValue: 'En breve lo llamaremos',
                     turnStatusWaiting: 'En breve lo llamaremos',
                     turnStatusCalling: 'Lo estamos llamando',
@@ -311,6 +318,7 @@
                     turnCodeLabel: 'Turn Code:',
                     turnLabel: 'Turn:',
                     turnStatusLabel: 'Turn Status:',
+                    terminalLabel: 'Terminal:',
                     turnStatusValue: 'We will call you shortly',
                     turnStatusWaiting: 'We will call you shortly',
                     turnStatusCalling: 'We are calling you',
@@ -392,6 +400,7 @@
             const turnNumberDisplay = document.getElementById('turnNumberDisplay');
             const turnStatusDisplay = document.getElementById('turnStatusDisplay');
             const turnCodeDisplay   = document.getElementById('turnCodeDisplay');
+            const terminalDisplay   = document.getElementById('terminalDisplay');
             const closeTurnSuccessModal = document.getElementById('closeTurnSuccessModal');
             const cancelTurnBtn     = document.getElementById('cancelTurnBtn');
 
@@ -475,9 +484,14 @@
             }
 
             // Función para actualizar el modal con los datos del turno
-            function updateTurnModal({ code, turn, turnStatus }) {
+            function updateTurnModal({ code, turn, turnStatus, terminal }) {
                 if (turnCodeDisplay && code) turnCodeDisplay.textContent = code;
                 if (turnNumberDisplay && turn) turnNumberDisplay.textContent = turn;
+                
+                // Actualizar terminal
+                if (terminalDisplay && terminal) {
+                    terminalDisplay.textContent = terminal;
+                }
                 
                 // Actualizar estado del turno
                 if (turnStatusDisplay && turnStatus) {
@@ -552,11 +566,15 @@
                         // Extraer turno
                         const turn = jsonDetails.turn || turnData.turn || '-';
 
+                        // Obtener el texto de la terminal seleccionada (mantener el valor original)
+                        const terminalText = sucursalSelect.options[sucursalSelect.selectedIndex]?.text || '-';
+
                         // Actualizar otros campos si están disponibles
                         updateTurnModal({
                             code: cleanCode,
                             turn: turn,
-                            turnStatus: status
+                            turnStatus: status,
+                            terminal: terminalText
                         });
 
                     } catch (e) {
@@ -786,11 +804,15 @@
                             statusText = translations[currentLang].turnStatusWaiting;
                         }
 
+                        // Obtener el texto de la terminal seleccionada
+                        const terminalText = sucursalSelect.options[sucursalSelect.selectedIndex]?.text || '-';
+
                         // Actualizar el modal con los datos iniciales
                         updateTurnModal({
                             code: turnCode,
                             turn: turn,
-                            turnStatus: turnStatus
+                            turnStatus: turnStatus,
+                            terminal: terminalText
                         });
 
                         if (turnSuccessModal) {
