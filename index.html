@@ -136,7 +136,7 @@
 
             <!-- Botón de envío -->
             <button type="submit" class="btn btn-primary" id="submitBtn">
-                <span class="btn-text" id="btnText" data-i18n="reservar">Reservar</span>
+                <span class="btn-text" id="btnText" data-i18n="reservar">Reserve</span>
                 <span class="btn-loader" id="btnLoader" style="display: none;">⏳</span>
             </button>
         </form>
@@ -237,6 +237,32 @@
             const API_BASE_URL = 'https://mobile.euro.debmedia.com/api/v1/queue';
             const API_TOKEN = 'l13h4QS8h7ILVDAOduVpAwghCuG6LM5grbHRD9Nb';
 
+            // Leer parámetro de terminal desde la URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const terminalParam = urlParams.get('terminal'); // Puede ser 't1' o 't4s'
+            
+            // Configuración de terminal según parámetro
+            let fixedTerminal = null;
+            let fixedBranchId = null;
+            
+            if (terminalParam === 't1' || terminalParam === 'T1') {
+                fixedTerminal = 't1';
+                fixedBranchId = 76;
+            } else if (terminalParam === 't4s' || terminalParam === 'T4S' || terminalParam === 't4S') {
+                fixedTerminal = 't4s';
+                fixedBranchId = 71;
+            }
+            
+            // Función para obtener el texto de la terminal según el idioma
+            function getTerminalText(lang, terminal) {
+                if (terminal === 't1') {
+                    return lang === 'en' ? 'Barajas T1 - Cibeles VIP Lounge' : 'Barajas T1 - Sala VIP Cibeles';
+                } else if (terminal === 't4s') {
+                    return lang === 'en' ? 'Barajas T4s - Neptuno VIP Lounge' : 'Barajas T4s - Sala VIP Neptuno';
+                }
+                return '-';
+            }
+
             // Translations
             const translations = {
                 es: {
@@ -306,7 +332,7 @@
                     privacyNumia: 'Numia Privacy Policy',
                     viewTerms: 'View Aena Terms and Conditions',
                     acceptTerms: 'I accept Aena Terms and Conditions',
-                    reservar: 'Reserve',
+                    reservar: 'Reservar',
                     modalTermsTitle: 'Aena Terms and Conditions',
                     turnGenerated: 'Turn Generated',
                     waitingMessage: 'Your turn has been queued. Waiting for confirmation...',
@@ -366,6 +392,12 @@
             const idiomaSelect      = document.getElementById('idioma');
             const sucursalSelect    = document.getElementById('sucursal');
             
+            // Si hay terminal desde parámetro URL, preseleccionar la opción en el dropdown
+            if (fixedTerminal && sucursalSelect) {
+                const terminalValue = fixedTerminal === 't1' ? 'barajas-t1' : 'neptuno-t4s';
+                sucursalSelect.value = terminalValue;
+            }
+            
             // Function to update terminal options based on language
             function updateTerminalOptions(lang) {
                 if (!sucursalSelect) return;
@@ -400,6 +432,11 @@
                     if (selectedLang === 'es' || selectedLang === 'en') {
                         switchLanguage(selectedLang);
                         updateTerminalOptions(selectedLang);
+                        // Si hay terminal preseleccionada desde parámetro, mantenerla seleccionada
+                        if (fixedTerminal && sucursalSelect) {
+                            const terminalValue = fixedTerminal === 't1' ? 'barajas-t1' : 'neptuno-t4s';
+                            sucursalSelect.value = terminalValue;
+                        }
                     }
                 });
             }
@@ -594,8 +631,8 @@
                         // Extraer turno
                         const turn = jsonDetails.turn || turnData.turn || '-';
 
-                        // Obtener el texto de la terminal seleccionada (mantener el valor original)
-                        const terminalText = sucursalSelect.options[sucursalSelect.selectedIndex]?.text || '-';
+                        // Obtener el texto de la terminal desde el dropdown
+                        const terminalText = sucursalSelect ? sucursalSelect.options[sucursalSelect.selectedIndex]?.text || '-' : '-';
 
                         // Actualizar otros campos si están disponibles
                         updateTurnModal({
@@ -736,7 +773,13 @@
                         return;
                     }
 
-                    const sucursalVal = sucursalSelect.value;
+                    // Obtener valor del dropdown (ya está preseleccionado si hay parámetro)
+                    const sucursalVal = sucursalSelect ? sucursalSelect.value : null;
+                    if (!sucursalVal) {
+                        showMessage(translations[currentLang].errorSelectTerminal, 'error');
+                        return;
+                    }
+                    
                     const idiomaVal   = idiomaSelect ? idiomaSelect.value : 'es';
 
                     // Validar idioma
@@ -750,10 +793,16 @@
                         switchLanguage(idiomaVal);
                     }
 
-                    const branchId = mapSucursalToBranchId(sucursalVal);
-                    if (!branchId) {
-                        showMessage(translations[currentLang].errorSelectTerminal, 'error');
-                        return;
+                    // Determinar branchId: usar el fijo si hay parámetro, sino usar la función
+                    let branchId = null;
+                    if (fixedBranchId) {
+                        branchId = fixedBranchId;
+                    } else {
+                        branchId = mapSucursalToBranchId(sucursalVal);
+                        if (!branchId) {
+                            showMessage(translations[currentLang].errorSelectTerminal, 'error');
+                            return;
+                        }
                     }
 
                     // Determinar queueId según la terminal y el idioma
@@ -832,8 +881,8 @@
                             statusText = translations[currentLang].turnStatusWaiting;
                         }
 
-                        // Obtener el texto de la terminal seleccionada
-                        const terminalText = sucursalSelect.options[sucursalSelect.selectedIndex]?.text || '-';
+                        // Obtener el texto de la terminal desde el dropdown
+                        const terminalText = sucursalSelect ? sucursalSelect.options[sucursalSelect.selectedIndex]?.text || '-' : '-';
 
                         // Actualizar el modal con los datos iniciales
                         updateTurnModal({
