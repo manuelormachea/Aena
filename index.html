@@ -222,6 +222,11 @@
                         </div>
                     </div>
 
+                    <!-- Privacy Message -->
+                    <div class="turn-privacy-message" data-i18n="privacyMessage">
+                        Aena S.M.E., S.A. tratará tus datos para avisarte cuando haya disponibilidad en la Sala VIP y facilitar tu acceso sin colas, basado en la ejecución de contrato de compra de acceso. Puedes ejercer derechos y más información en el siguiente <a href="https://www.aena.es/es/politica-de-privacidad.html" target="_blank" rel="noopener noreferrer" data-i18n="privacyLink">enlace</a>.
+                    </div>
+
                     <!-- Cancel Button -->
                     <div class="turn-modal-buttons">
                         <button class="btn btn-cancel-turn" id="cancelTurnBtn" data-i18n="cancelTurn">Cancelar mi turno</button>
@@ -313,7 +318,9 @@
                     errorSelectIdioma: 'Seleccione un idioma.',
                     recaptchaError: 'Por favor, complete el reCAPTCHA para continuar.',
                     successMessage: 'Su turno presencial ha sido generado. Revise su correo con los detalles.',
-                    errorMessage: 'Hubo un problema al generar su turno. Inténtelo de nuevo.'
+                    errorMessage: 'Hubo un problema al generar su turno. Inténtelo de nuevo.',
+                    privacyMessage: 'Aena S.M.E., S.A. tratará tus datos para avisarte cuando haya disponibilidad en la Sala VIP y facilitar tu acceso sin colas, basado en la ejecución de contrato de compra de acceso. Puedes ejercer derechos y más información en el siguiente <a href="https://www.aena.es/es/politica-de-privacidad.html" target="_blank" rel="noopener noreferrer">enlace</a>.',
+                    privacyLink: 'enlace'
                 },
                 en: {
                     title: 'VIP Lounge Reservation',
@@ -363,7 +370,9 @@
                     errorSelectIdioma: 'Please select a language.',
                     recaptchaError: 'Please complete the reCAPTCHA to continue.',
                     successMessage: 'Your in-person turn has been generated. Check your email for details.',
-                    errorMessage: 'There was a problem generating your turn. Please try again.'
+                    errorMessage: 'There was a problem generating your turn. Please try again.',
+                    privacyMessage: 'Aena S.M.E., S.A. will process your data to notify you when there is availability in the VIP Lounge and facilitate your access without queues, based on the execution of the access purchase contract. You can exercise your rights and find more information in the following <a href="https://www.aena.es/es/politica-de-privacidad.html" target="_blank" rel="noopener noreferrer">link</a>.',
+                    privacyLink: 'link'
                 }
             };
 
@@ -381,6 +390,9 @@
                     if (langData[key]) {
                         if (element.tagName === 'INPUT' && element.type === 'text') {
                             element.placeholder = langData[key];
+                        } else if (key === 'privacyMessage') {
+                            // Para el mensaje de privacidad, usar innerHTML para mantener el enlace
+                            element.innerHTML = langData[key];
                         } else {
                             element.textContent = langData[key];
                         }
@@ -392,17 +404,15 @@
             const idiomaSelect      = document.getElementById('idioma');
             const sucursalSelect    = document.getElementById('sucursal');
             
-            // Si hay terminal fija desde URL, ocultar el dropdown
+            // Si hay terminal desde parámetro URL, preseleccionar la opción en el dropdown
             if (fixedTerminal && sucursalSelect) {
-                const terminalGroup = sucursalSelect.closest('.form-group');
-                if (terminalGroup) {
-                    terminalGroup.style.display = 'none';
-                }
+                const terminalValue = fixedTerminal === 't1' ? 'barajas-t1' : 'neptuno-t4s';
+                sucursalSelect.value = terminalValue;
             }
             
             // Function to update terminal options based on language
             function updateTerminalOptions(lang) {
-                if (!sucursalSelect || fixedTerminal) return; // No actualizar si hay terminal fija
+                if (!sucursalSelect) return;
                 
                 const currentValue = sucursalSelect.value;
                 
@@ -434,6 +444,11 @@
                     if (selectedLang === 'es' || selectedLang === 'en') {
                         switchLanguage(selectedLang);
                         updateTerminalOptions(selectedLang);
+                        // Si hay terminal preseleccionada desde parámetro, mantenerla seleccionada
+                        if (fixedTerminal && sucursalSelect) {
+                            const terminalValue = fixedTerminal === 't1' ? 'barajas-t1' : 'neptuno-t4s';
+                            sucursalSelect.value = terminalValue;
+                        }
                     }
                 });
             }
@@ -628,13 +643,8 @@
                         // Extraer turno
                         const turn = jsonDetails.turn || turnData.turn || '-';
 
-                        // Obtener el texto de la terminal
-                        let terminalText = '-';
-                        if (fixedTerminal) {
-                            terminalText = getTerminalText(currentLang, fixedTerminal);
-                        } else if (sucursalSelect) {
-                            terminalText = sucursalSelect.options[sucursalSelect.selectedIndex]?.text || '-';
-                        }
+                        // Obtener el texto de la terminal desde el dropdown
+                        const terminalText = sucursalSelect ? sucursalSelect.options[sucursalSelect.selectedIndex]?.text || '-' : '-';
 
                         // Actualizar otros campos si están disponibles
                         updateTurnModal({
@@ -775,18 +785,11 @@
                         return;
                     }
 
-                    // Determinar terminal: desde parámetro URL o desde dropdown
-                    let sucursalVal = null;
-                    if (fixedTerminal) {
-                        // Usar terminal fija desde URL
-                        sucursalVal = fixedTerminal === 't1' ? 'barajas-t1' : 'neptuno-t4s';
-                    } else {
-                        // Usar valor del dropdown
-                        sucursalVal = sucursalSelect ? sucursalSelect.value : null;
-                        if (!sucursalVal) {
-                            showMessage(translations[currentLang].errorSelectTerminal, 'error');
-                            return;
-                        }
+                    // Obtener valor del dropdown (ya está preseleccionado si hay parámetro)
+                    const sucursalVal = sucursalSelect ? sucursalSelect.value : null;
+                    if (!sucursalVal) {
+                        showMessage(translations[currentLang].errorSelectTerminal, 'error');
+                        return;
                     }
                     
                     const idiomaVal   = idiomaSelect ? idiomaSelect.value : 'es';
@@ -802,7 +805,7 @@
                         switchLanguage(idiomaVal);
                     }
 
-                    // Determinar branchId: desde parámetro URL o desde función
+                    // Determinar branchId: usar el fijo si hay parámetro, sino usar la función
                     let branchId = null;
                     if (fixedBranchId) {
                         branchId = fixedBranchId;
@@ -890,13 +893,8 @@
                             statusText = translations[currentLang].turnStatusWaiting;
                         }
 
-                        // Obtener el texto de la terminal
-                        let terminalText = '-';
-                        if (fixedTerminal) {
-                            terminalText = getTerminalText(currentLang, fixedTerminal);
-                        } else if (sucursalSelect) {
-                            terminalText = sucursalSelect.options[sucursalSelect.selectedIndex]?.text || '-';
-                        }
+                        // Obtener el texto de la terminal desde el dropdown
+                        const terminalText = sucursalSelect ? sucursalSelect.options[sucursalSelect.selectedIndex]?.text || '-' : '-';
 
                         // Actualizar el modal con los datos iniciales
                         updateTurnModal({
