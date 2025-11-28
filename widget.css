@@ -722,6 +722,31 @@ body {
 }
 
 
+/* Privacy Message */
+.turn-privacy-message {
+    padding: 15px 20px;
+    margin: 0 20px;
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--text-light);
+    text-align: center;
+    background-color: #F8F9FA;
+    border-radius: 6px;
+    border-left: 3px solid var(--aena-green);
+}
+
+.turn-privacy-message a {
+    color: var(--aena-green);
+    text-decoration: underline;
+    font-weight: 500;
+    transition: color 0.3s;
+}
+
+.turn-privacy-message a:hover {
+    color: var(--aena-dark-green);
+    text-decoration: none;
+}
+
 /* Cancel Button */
 .turn-modal-buttons {
     padding: 10px 20px 20px 20px;
@@ -924,5 +949,3 @@ select.form-control {
     background-position: right 16px center;
     padding-right: 40px;
 }
-
-
