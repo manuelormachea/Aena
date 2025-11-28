@@ -392,15 +392,17 @@
             const idiomaSelect      = document.getElementById('idioma');
             const sucursalSelect    = document.getElementById('sucursal');
             
-            // Si hay terminal desde parámetro URL, preseleccionar la opción en el dropdown
+            // Si hay terminal fija desde URL, ocultar el dropdown
             if (fixedTerminal && sucursalSelect) {
-                const terminalValue = fixedTerminal === 't1' ? 'barajas-t1' : 'neptuno-t4s';
-                sucursalSelect.value = terminalValue;
+                const terminalGroup = sucursalSelect.closest('.form-group');
+                if (terminalGroup) {
+                    terminalGroup.style.display = 'none';
+                }
             }
             
             // Function to update terminal options based on language
             function updateTerminalOptions(lang) {
-                if (!sucursalSelect) return;
+                if (!sucursalSelect || fixedTerminal) return; // No actualizar si hay terminal fija
                 
                 const currentValue = sucursalSelect.value;
                 
@@ -432,11 +434,6 @@
                     if (selectedLang === 'es' || selectedLang === 'en') {
                         switchLanguage(selectedLang);
                         updateTerminalOptions(selectedLang);
-                        // Si hay terminal preseleccionada desde parámetro, mantenerla seleccionada
-                        if (fixedTerminal && sucursalSelect) {
-                            const terminalValue = fixedTerminal === 't1' ? 'barajas-t1' : 'neptuno-t4s';
-                            sucursalSelect.value = terminalValue;
-                        }
                     }
                 });
             }
@@ -631,8 +628,13 @@
                         // Extraer turno
                         const turn = jsonDetails.turn || turnData.turn || '-';
 
-                        // Obtener el texto de la terminal desde el dropdown
-                        const terminalText = sucursalSelect ? sucursalSelect.options[sucursalSelect.selectedIndex]?.text || '-' : '-';
+                        // Obtener el texto de la terminal
+                        let terminalText = '-';
+                        if (fixedTerminal) {
+                            terminalText = getTerminalText(currentLang, fixedTerminal);
+                        } else if (sucursalSelect) {
+                            terminalText = sucursalSelect.options[sucursalSelect.selectedIndex]?.text || '-';
+                        }
 
                         // Actualizar otros campos si están disponibles
                         updateTurnModal({
@@ -773,11 +775,18 @@
                         return;
                     }
 
-                    // Obtener valor del dropdown (ya está preseleccionado si hay parámetro)
-                    const sucursalVal = sucursalSelect ? sucursalSelect.value : null;
-                    if (!sucursalVal) {
-                        showMessage(translations[currentLang].errorSelectTerminal, 'error');
-                        return;
+                    // Determinar terminal: desde parámetro URL o desde dropdown
+                    let sucursalVal = null;
+                    if (fixedTerminal) {
+                        // Usar terminal fija desde URL
+                        sucursalVal = fixedTerminal === 't1' ? 'barajas-t1' : 'neptuno-t4s';
+                    } else {
+                        // Usar valor del dropdown
+                        sucursalVal = sucursalSelect ? sucursalSelect.value : null;
+                        if (!sucursalVal) {
+                            showMessage(translations[currentLang].errorSelectTerminal, 'error');
+                            return;
+                        }
                     }
                     
                     const idiomaVal   = idiomaSelect ? idiomaSelect.value : 'es';
@@ -793,7 +802,7 @@
                         switchLanguage(idiomaVal);
                     }
 
-                    // Determinar branchId: usar el fijo si hay parámetro, sino usar la función
+                    // Determinar branchId: desde parámetro URL o desde función
                     let branchId = null;
                     if (fixedBranchId) {
                         branchId = fixedBranchId;
@@ -881,8 +890,13 @@
                             statusText = translations[currentLang].turnStatusWaiting;
                         }
 
-                        // Obtener el texto de la terminal desde el dropdown
-                        const terminalText = sucursalSelect ? sucursalSelect.options[sucursalSelect.selectedIndex]?.text || '-' : '-';
+                        // Obtener el texto de la terminal
+                        let terminalText = '-';
+                        if (fixedTerminal) {
+                            terminalText = getTerminalText(currentLang, fixedTerminal);
+                        } else if (sucursalSelect) {
+                            terminalText = sucursalSelect.options[sucursalSelect.selectedIndex]?.text || '-';
+                        }
 
                         // Actualizar el modal con los datos iniciales
                         updateTurnModal({
