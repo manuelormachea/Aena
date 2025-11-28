@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Aena - Reserva Sala VIP T4S</title>
+    <link rel="icon" type="image/png" href="images/Aena_Logo_New.svg.png">
+    <link rel="stylesheet" href="widget.css">
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+</head>
+<body>
+    <div class="widget-container">
+        <div class="widget-header">
+            <div class="logo-container">
+                <img src="images/Aena_Vip_RGB_ESP.png" alt="Aena Logo" class="logo-img">
+            </div>
+        </div>
+
+        <form id="reservationForm" class="reservation-form">
+            <!-- Idioma -->
+            <div class="form-group">
+                <label for="idioma">Idioma/Language</label>
+                <select id="idioma" name="idioma" class="form-control" required>
+                    <option value="">Seleccione un idioma</option>
+                    <option value="es">Español</option>
+                    <option value="en">English</option>
+                </select>
+            </div>
+
+            <!-- Nombre -->
+            <div class="form-group">
+                <label for="nombre" data-i18n="nombre">Nombre</label>
+                <input type="text" id="nombre" name="nombre" class="form-control" required>
+            </div>
+
+            <!-- Apellido -->
+            <div class="form-group">
+                <label for="apellido" data-i18n="apellido">Apellido</label>
+                <input type="text" id="apellido" name="apellido" class="form-control" required>
+            </div>
+
+            <!-- Teléfono con código de país -->
+            <div class="form-group">
+                <label for="telefono" data-i18n="telefono">Teléfono</label>
+                <div class="phone-input-group">
+                    <select id="codigoPais" name="codigoPais" class="form-control phone-code" required>
+                        <option value="+1">+1 (USA/Canadá)</option>
+                        <option value="+7">+7 (Rusia)</option>
+                        <option value="+20">+20 (Egipto)</option>
+                        <option value="+27">+27 (Sudáfrica)</option>
+                        <option value="+30">+30 (Grecia)</option>
+                        <option value="+31">+31 (Países Bajos)</option>
+                        <option value="+32">+32 (Bélgica)</option>
+                        <option value="+33">+33 (Francia)</option>
+                        <option value="+34">+34 (España)</option>
+                        <option value="+36">+36 (Hungría)</option>
+                        <option value="+39">+39 (Italia)</option>
+                        <option value="+40">+40 (Rumanía)</option>
+                        <option value="+41">+41 (Suiza)</option>
+                        <option value="+43">+43 (Austria)</option>
+                        <option value="+44">+44 (Reino Unido)</option>
+                        <option value="+45">+45 (Dinamarca)</option>
+                        <option value="+46">+46 (Suecia)</option>
+                        <option value="+47">+47 (Noruega)</option>
+                        <option value="+48">+48 (Polonia)</option>
+                        <option value="+49">+49 (Alemania)</option>
+                        <option value="+51">+51 (Perú)</option>
+                        <option value="+52">+52 (México)</option>
+                        <option value="+54">+54 (Argentina)</option>
+                        <option value="+55">+55 (Brasil)</option>
+                        <option value="+56">+56 (Chile)</option>
+                        <option value="+57">+57 (Colombia)</option>
+                        <option value="+61">+61 (Australia)</option>
+                        <option value="+64">+64 (Nueva Zelanda)</option>
+                        <option value="+81">+81 (Japón)</option>
+                        <option value="+82">+82 (Corea del Sur)</option>
+                        <option value="+86">+86 (China)</option>
+                        <option value="+90">+90 (Turquía)</option>
+                        <option value="+91">+91 (India)</option>
+                        <option value="+212">+212 (Marruecos)</option>
+                        <option value="+353">+353 (Irlanda)</option>
+                        <option value="+351">+351 (Portugal)</option>
+                        <option value="+358">+358 (Finlandia)</option>
+                        <option value="+420">+420 (República Checa)</option>
+                        <option value="+966">+966 (Arabia Saudí)</option>
+                        <option value="+971">+971 (Emiratos Árabes)</option>
+                    </select>
+                    <input type="tel" id="telefono" name="telefono" class="form-control phone-number" placeholder="123 456 789" required>
+                </div>
+            </div>
+
+            <!-- Cantidad de Pasajeros -->
+            <div class="form-group">
+                <label for="acompanantes" data-i18n="cantidadPersonas">Cantidad de pasajeros</label>
+                <input type="number" id="acompanantes" name="acompanantes" class="form-control" min="0" max="10" value="0" required>
+                <small class="form-help" data-i18n="helpPersonas">Número de pasajeros que desean ingresar (incluyéndote a ti)</small>
+            </div>
+
+            <!-- Email -->
+            <div class="form-group">
+                <label for="email" data-i18n="email">Email</label>
+                <input type="email" id="email" name="email" class="form-control" required>
+            </div>
+
+            <!-- Políticas legales -->
+            <div class="legal-links">
+                <p class="legal-text" data-i18n="legalText">Al continuar, aceptas nuestras políticas:</p>
+                <div class="legal-links-container">
+                    <a href="https://web.numia.co/politica-de-privacidad-de-datos?_gl=1*14hdwaa*_gcl_au*MTY0MzUzMzYyMS4xNzYxNjc1NjMx" target="_blank" class="legal-link" data-i18n="privacyNumia">Política de privacidad de Numia</a>
+                </div>
+                <div class="terms-button-container">
+                    <button type="button" class="btn-terms" id="openTermsBtn" data-i18n="viewTerms">Vea Términos y Condiciones de Aena</button>
+                </div>
+                <div class="terms-checkbox-container">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="acceptTerms" name="acceptTerms" required class="checkbox-input">
+                        <span class="checkbox-text" data-i18n="acceptTerms">Acepto los Términos y Condiciones de Aena</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- reCAPTCHA -->
+            <div class="form-group">
+                <div class="g-recaptcha" data-sitekey="6LexAhgsAAAAANc5FRiF2HxYSTpgPmTR-97E6vv7"></div>
+            </div>
+
+            <!-- Botón de envío -->
+            <button type="submit" class="btn btn-primary" id="submitBtn">
+                <span class="btn-text" id="btnText" data-i18n="reservar">Reserve</span>
+                <span class="btn-loader" id="btnLoader" style="display: none;">⏳</span>
+            </button>
+        </form>
+
+        <!-- Mensaje de éxito/error -->
+        <div class="message-container" id="messageContainer" style="display: none;">
+            <div class="message" id="message"></div>
+        </div>
+
+        <!-- Sala de espera -->
+        <div class="waiting-room" id="waitingRoom" style="display: none;">
+            <div class="waiting-content">
+                <div class="waiting-icon">⏳</div>
+                <h2 class="waiting-title" data-i18n="turnGenerated">Turno Generado</h2>
+                <p class="waiting-message" data-i18n="waitingMessage">Tu turno ha sido encolado. Esperando confirmación...</p>
+                <div class="waiting-loader">
+                    <div class="loader"></div>
+                </div>
+                <div class="turn-info" id="turnInfo"></div>
+                <button class="btn btn-secondary" id="cancelWaiting" data-i18n="cancelar">Cancelar</button>
+            </div>
+        </div>
+
+        <!-- Modal de Términos y Condiciones -->
+        <div class="modal-overlay" id="termsModal">
+            <div class="modal-container terms-modal">
+                <div class="modal-header">
+                    <h2 class="modal-title" data-i18n="modalTermsTitle">Términos y Condiciones de Aena</h2>
+                    <button class="modal-close" id="closeTermsModal">×</button>
+                </div>
+                <div class="modal-body terms-body">
+                    <iframe src="Ter y Cond/ES_Terminos_y_condiciones.pdf" class="pdf-viewer" frameborder="0"></iframe>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal de Turno Generado -->
+        <div class="modal-overlay" id="turnSuccessModal">
+            <div class="modal-container turn-success-modal">
+                <div class="turn-success-content">
+                    <!-- Header -->
+                    <div class="turn-modal-header">
+                        <div class="turn-modal-header-left">
+                            <span class="turn-modal-clock-icon">🕐</span>
+                            <h2 class="turn-modal-header-title" data-i18n="reserveTurnTitle">RESERVA TU TURNO</h2>
+                        </div>
+                        <button class="turn-modal-close-btn" id="closeTurnSuccessModal">×</button>
+                    </div>
+
+                    <!-- Success Banner -->
+                    <div class="turn-success-banner">
+                        <div class="turn-success-banner-content">
+                            <span class="turn-success-check">✓</span>
+                            <span class="turn-success-banner-text" data-i18n="turnReservedSuccess">Turno Reservado Exitosamente</span>
+                        </div>
+                    </div>
+                    <p class="turn-success-message" data-i18n="turnGeneratedMessage">¡Tu turno ha sido generado en el sistema!</p>
+
+                    <!-- Turn Information Cards -->
+                    <div class="turn-info-cards">
+                        <!-- Código del Turno (Full Width) -->
+                        <div class="turn-info-card turn-info-card-full">
+                            <span class="turn-info-card-label" data-i18n="turnCodeLabel">Código del Turno:</span>
+                            <span class="turn-info-card-value turn-code-link" id="turnCodeDisplay">-</span>
+                        </div>
+
+                        <!-- Two Column Cards -->
+                        <div class="turn-info-cards-row">
+                            <div class="turn-info-card">
+                                <span class="turn-info-card-label" data-i18n="turnLabel">Turno:</span>
+                                <span class="turn-info-card-value" id="turnNumberDisplay">-</span>
+                            </div>
+                            <div class="turn-info-card">
+                                <span class="turn-info-card-label" data-i18n="turnStatusLabel">Estado del Turno:</span>
+                                <span class="turn-info-card-value" data-i18n="turnStatusValue" id="turnStatusDisplay">En breve lo llamaremos</span>
+                            </div>
+                        </div>
+
+                        <!-- Terminal Card -->
+                        <div class="turn-info-card turn-info-card-full">
+                            <span class="turn-info-card-label" data-i18n="terminalLabel">Terminal:</span>
+                            <span class="turn-info-card-value" id="terminalDisplay">-</span>
+                        </div>
+                    </div>
+
+                    <!-- Cancel Button -->
+                    <div class="turn-modal-buttons">
+                        <button class="btn btn-cancel-turn" id="cancelTurnBtn" data-i18n="cancelTurn">Cancelar mi turno</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JS TODO JUNTO -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const API_BASE_URL = 'https://mobile.euro.debmedia.com/api/v1/queue';
+            const API_TOKEN = 'l13h4QS8h7ILVDAOduVpAwghCuG6LM5grbHRD9Nb';
+
+            // BranchID fijo para T4S
+            const FIXED_BRANCH_ID = 71;
+
+            // Translations
+            const translations = {
+                es: {
+                    title: 'Reserva Sala VIP',
+                    terminal: 'Terminal',
+                    selectTerminal: 'Seleccione una terminal',
+                    salaVIP: 'Sala VIP',
+                    selectSala: 'Seleccione una sala',
+                    salaVIPOption: 'Sala VIP',
+                    nombre: 'Nombre',
+                    apellido: 'Apellido',
+                    telefono: 'Teléfono',
+                    cantidadPersonas: 'Cantidad de pasajeros',
+                    helpPersonas: 'Número de pasajeros que desean ingresar (incluyéndote a ti)',
+                    email: 'Email',
+                    legalText: 'Al continuar, aceptas nuestras políticas:',
+                    privacyNumia: 'Política de privacidad de Numia',
+                    viewTerms: 'Vea Términos y Condiciones de Aena',
+                    acceptTerms: 'Acepto los Términos y Condiciones de Aena',
+                    reservar: 'Reservar',
+                    modalTermsTitle: 'Términos y Condiciones de Aena',
+                    turnGenerated: 'Turno Generado',
+                    waitingMessage: 'Su turno ha sido encolado. Esperando confirmación...',
+                    cancelar: 'Cancelar',
+                    turnGeneratedTitle: 'Turno Generado!',
+                    reserveTurnTitle: 'RESERVE SU TURNO',
+                    turnReservedSuccess: 'Turno Reservado Exitosamente',
+                    turnGeneratedMessage: '¡Su turno ha sido generado en el sistema!',
+                    turnCodeLabel: 'Código del Turno:',
+                    turnLabel: 'Turno:',
+                    turnStatusLabel: 'Estado del Turno:',
+                    terminalLabel: 'Terminal:',
+                    turnStatusValue: 'En breve lo llamaremos',
+                    turnStatusWaiting: 'En breve lo llamaremos',
+                    turnStatusCalling: 'Lo estamos llamando',
+                    turnStatusFinalized: 'Atención finalizada',
+                    turnStatusError: 'Error al consultar',
+                    cancelTurn: 'Cancelar mi turno',
+                    cancelTurnConfirm: '¿Está seguro de que desea cancelar su turno?',
+                    cancelTurnSuccess: 'Su turno ha sido cancelado exitosamente.',
+                    cancelTurnError: 'Hubo un error al cancelar su turno. Inténtelo de nuevo.',
+                    idiomaLabel: 'Idioma',
+                    selectIdioma: 'Seleccione un idioma',
+                    idiomaEsp: 'Español',
+                    idiomaEn: 'Inglés',
+                    errorSelectTerminal: 'Seleccione una terminal válida.',
+                    errorSelectSala: 'Seleccione una Sala VIP.',
+                    errorSelectIdioma: 'Seleccione un idioma.',
+                    recaptchaError: 'Por favor, complete el reCAPTCHA para continuar.',
+                    successMessage: 'Su turno presencial ha sido generado. Revise su correo con los detalles.',
+                    errorMessage: 'Hubo un problema al generar su turno. Inténtelo de nuevo.'
+                },
+                en: {
+                    title: 'VIP Lounge Reservation',
+                    terminal: 'Terminal',
+                    selectTerminal: 'Select a terminal',
+                    salaVIP: 'VIP Lounge',
+                    selectSala: 'Select a lounge',
+                    salaVIPOption: 'VIP Lounge',
+                    nombre: 'First Name',
+                    apellido: 'Last Name',
+                    telefono: 'Phone',
+                    cantidadPersonas: 'Number of Passengers',
+                    helpPersonas: 'Number of passengers who wish to enter (including yourself)',
+                    email: 'Email',
+                    legalText: 'By continuing, you accept our policies:',
+                    privacyNumia: 'Numia Privacy Policy',
+                    viewTerms: 'View Aena Terms and Conditions',
+                    acceptTerms: 'I accept Aena Terms and Conditions',
+                    reservar: 'Reservar',
+                    modalTermsTitle: 'Aena Terms and Conditions',
+                    turnGenerated: 'Turn Generated',
+                    waitingMessage: 'Your turn has been queued. Waiting for confirmation...',
+                    cancelar: 'Cancel',
+                    turnGeneratedTitle: 'Turn Generated!',
+                    reserveTurnTitle: 'RESERVE YOUR TURN',
+                    turnReservedSuccess: 'Turn Reserved Successfully',
+                    turnGeneratedMessage: 'Your turn has been generated in the system!',
+                    turnCodeLabel: 'Turn Code:',
+                    turnLabel: 'Turn:',
+                    turnStatusLabel: 'Turn Status:',
+                    terminalLabel: 'Terminal:',
+                    turnStatusValue: 'We will call you shortly',
+                    turnStatusWaiting: 'We will call you shortly',
+                    turnStatusCalling: 'We are calling you',
+                    turnStatusFinalized: 'Service completed',
+                    turnStatusError: 'Error checking status',
+                    cancelTurn: 'Cancel my turn',
+                    cancelTurnConfirm: 'Are you certain you wish to cancel your turn?',
+                    cancelTurnSuccess: 'Your turn has been successfully cancelled.',
+                    cancelTurnError: 'There was an error cancelling your turn. Please try again.',
+                    idiomaLabel: 'Language',
+                    selectIdioma: 'Select a language',
+                    idiomaEsp: 'Spanish',
+                    idiomaEn: 'English',
+                    errorSelectTerminal: 'Please select a valid terminal.',
+                    errorSelectSala: 'Please select a VIP Lounge.',
+                    errorSelectIdioma: 'Please select a language.',
+                    recaptchaError: 'Please complete the reCAPTCHA to continue.',
+                    successMessage: 'Your in-person turn has been generated. Check your email for details.',
+                    errorMessage: 'There was a problem generating your turn. Please try again.'
+                }
+            };
+
+            // Current language
+            let currentLang = 'es';
+
+            // Language switching function
+            function switchLanguage(lang) {
+                currentLang = lang;
+                const langData = translations[lang];
+
+                // Update all elements with data-i18n attribute
+                document.querySelectorAll('[data-i18n]').forEach(element => {
+                    const key = element.getAttribute('data-i18n');
+                    if (langData[key]) {
+                        if (element.tagName === 'INPUT' && element.type === 'text') {
+                            element.placeholder = langData[key];
+                        } else {
+                            element.textContent = langData[key];
+                        }
+                    }
+                });
+            }
+
+            // Función para obtener el texto de la terminal según el idioma
+            function getTerminalText(lang) {
+                return lang === 'en' ? 'Barajas T4s - Neptuno VIP Lounge' : 'Barajas T4s - Sala VIP Neptuno';
+            }
+
+            const form              = document.getElementById('reservationForm');
+            const idiomaSelect      = document.getElementById('idioma');
+            
+            // Language select event listener
+            if (idiomaSelect) {
+                idiomaSelect.addEventListener('change', (e) => {
+                    const selectedLang = e.target.value;
+                    if (selectedLang === 'es' || selectedLang === 'en') {
+                        switchLanguage(selectedLang);
+                    }
+                });
+            }
+            const codigoPaisInput   = document.getElementById('codigoPais');
+            const telefonoInput     = document.getElementById('telefono');
+            const acompanantesInput = document.getElementById('acompanantes');
+            const nombreInput       = document.getElementById('nombre');
+            const apellidoInput     = document.getElementById('apellido');
+            const emailInput        = document.getElementById('email');
+            const submitBtn         = document.getElementById('submitBtn');
+            const btnText           = document.getElementById('btnText');
+            const btnLoader         = document.getElementById('btnLoader');
+
+            const messageContainer  = document.getElementById('messageContainer');
+            const messageBox        = document.getElementById('message');
+
+            const waitingRoom       = document.getElementById('waitingRoom');
+            const turnInfo          = document.getElementById('turnInfo');
+            const cancelWaitingBtn  = document.getElementById('cancelWaiting');
+
+            const openTermsBtn      = document.getElementById('openTermsBtn');
+            const termsModal        = document.getElementById('termsModal');
+            const closeTermsModal   = document.getElementById('closeTermsModal');
+
+            const turnSuccessModal  = document.getElementById('turnSuccessModal');
+            const turnNumberDisplay = document.getElementById('turnNumberDisplay');
+            const turnStatusDisplay = document.getElementById('turnStatusDisplay');
+            const turnCodeDisplay   = document.getElementById('turnCodeDisplay');
+            const terminalDisplay   = document.getElementById('terminalDisplay');
+            const closeTurnSuccessModal = document.getElementById('closeTurnSuccessModal');
+            const cancelTurnBtn     = document.getElementById('cancelTurnBtn');
+
+            // Variable para el intervalo de polling
+            let pollingInterval = null;
+            
+
+            function showMessage(text, type) {
+                if (!messageContainer || !messageBox) return;
+                messageBox.textContent = text;
+                messageBox.className = 'message ' + (type === 'error' ? 'message-error' : 'message-success');
+                messageContainer.style.display = 'block';
+            }
+
+            function hideMessage() {
+                if (!messageContainer) return;
+                messageContainer.style.display = 'none';
+            }
+
+            function setLoading(isLoading) {
+                if (!submitBtn || !btnText || !btnLoader) return;
+                submitBtn.disabled = isLoading;
+                btnLoader.style.display = isLoading ? 'inline-block' : 'none';
+                btnText.style.display   = isLoading ? 'none' : 'inline';
+            }
+
+            async function createTurn(payload, queueId, branchId) {
+                // Construir URL dinámica reemplazando los placeholders
+                const apiUrl = `${API_BASE_URL}/${queueId}/branch/${branchId}/enqueue`;
+                
+                console.log('Enviando payload a Debmedia:', payload);
+                console.log('URL:', apiUrl);
+                
+                const res = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + API_TOKEN
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!res.ok) {
+                    let extra = '';
+                    try { extra = await res.text(); } catch (_) {}
+                    throw new Error('Error API (' + res.status + '): ' + extra);
+                }
+
+                try { return await res.json(); }
+                catch (_) { return {}; }
+            }
+
+            // Modal de Términos
+            if (openTermsBtn && termsModal && closeTermsModal) {
+                openTermsBtn.addEventListener('click', () => {
+                    termsModal.classList.add('active');
+                });
+
+                closeTermsModal.addEventListener('click', () => {
+                    termsModal.classList.remove('active');
+                });
+
+                termsModal.addEventListener('click', (e) => {
+                    if (e.target === termsModal) {
+                        termsModal.classList.remove('active');
+                    }
+                });
+            }
+
+            // Cancelar sala de espera
+            if (cancelWaitingBtn && waitingRoom) {
+                cancelWaitingBtn.addEventListener('click', () => {
+                    waitingRoom.style.display = 'none';
+                });
+            }
+
+            // Función para actualizar el modal con los datos del turno
+            function updateTurnModal({ code, turn, turnStatus, terminal }) {
+                if (turnCodeDisplay && code) turnCodeDisplay.textContent = code;
+                if (turnNumberDisplay && turn) turnNumberDisplay.textContent = turn;
+                
+                // Actualizar terminal
+                if (terminalDisplay && terminal) {
+                    terminalDisplay.textContent = terminal;
+                }
+                
+                // Actualizar estado del turno
+                if (turnStatusDisplay && turnStatus) {
+                    let statusText = '';
+                    if (turnStatus === 'ANNOUNCED' || turnStatus === 'calling' || turnStatus === 'being_called') {
+                        statusText = translations[currentLang].turnStatusCalling;
+                    } else if (turnStatus === 'WAITING_TO_BE_CALLED' || turnStatus === 'waiting') {
+                        statusText = translations[currentLang].turnStatusWaiting;
+                    } else if (turnStatus === 'FINALIZED' || turnStatus === 'finalized') {
+                        statusText = translations[currentLang].turnStatusFinalized || 'Atención finalizada';
+                    } else {
+                        statusText = turnStatus;
+                    }
+                    turnStatusDisplay.textContent = statusText;
+                }
+            }
+
+            // Función para iniciar el polling del estado del turno
+            function startPolling(turnCode) {
+                stopPolling();
+                
+                if (!turnCode || turnCode === 'N/A' || turnCode === '-') {
+                    return;
+                }
+
+                const cleanCode = turnCode.trim().replace(/\s+/g, '');
+                const url = `https://mobile.euro.debmedia.com/api/v1/turn/code/${encodeURIComponent(cleanCode)}`;
+
+                const mapStatus = (status) => {
+                    if (status === 'ANNOUNCED') {
+                        return { text: translations[currentLang].turnStatusCalling, cls: 'status-ok' };
+                    } else if (status === 'WAITING_TO_BE_CALLED') {
+                        return { text: translations[currentLang].turnStatusWaiting, cls: 'status-warn' };
+                    } else if (status === 'FINALIZED') {
+                        return { text: translations[currentLang].turnStatusFinalized || 'Atención finalizada', cls: 'status-done' };
+                    } else {
+                        return { text: status || 'Desconocido', cls: 'status-warn' };
+                    }
+                };
+
+                const tick = async () => {
+                    try {
+                        const res = await fetch(url, {
+                            headers: {
+                                'Authorization': 'Bearer ' + API_TOKEN,
+                                'Content-Type': 'application/json'
+                            }
+                        });
+
+                        if (!res.ok) {
+                            throw new Error(`Estado no disponible (${res.status})`);
+                        }
+
+                        const data = await res.json();
+                        const turnData = data.data || data;
+                        const jsonDetails = turnData.jsonDetails || data.jsonDetails || {};
+                        
+                        // La respuesta puede tener branch.monitorInfo o monitorInfo directamente
+                        const branch = data.branch || turnData.branch || {};
+                        const branchMonitorInfo = branch.monitorInfo || {};
+                        const monitorInfo = turnData.monitorInfo || data.monitorInfo || branchMonitorInfo || {};
+
+                        // Mapear el estado
+                        const status = turnData.status || turnData.turnStatus || 'WAITING_TO_BE_CALLED';
+                        const m = mapStatus(status);
+                        
+                        if (turnStatusDisplay) {
+                            turnStatusDisplay.textContent = m.text;
+                            turnStatusDisplay.className = `turn-info-card-value ${m.cls}`;
+                        }
+
+                        // Extraer turno
+                        const turn = jsonDetails.turn || turnData.turn || '-';
+
+                        // Obtener el texto de la terminal según el idioma actual
+                        const terminalText = getTerminalText(currentLang);
+
+                        // Actualizar otros campos si están disponibles
+                        updateTurnModal({
+                            code: cleanCode,
+                            turn: turn,
+                            turnStatus: status,
+                            terminal: terminalText
+                        });
+
+                    } catch (e) {
+                        console.error('Error al consultar estado del turno:', e);
+                        if (turnStatusDisplay) {
+                            turnStatusDisplay.textContent = translations[currentLang].turnStatusError || 'Error al consultar';
+                            turnStatusDisplay.className = 'turn-info-card-value status-err';
+                        }
+                    }
+                };
+
+                // Ejecutar inmediatamente y luego cada 5 segundos
+                tick();
+                pollingInterval = setInterval(tick, 5000);
+            }
+
+            // Función para detener el polling
+            function stopPolling() {
+                if (pollingInterval) {
+                    clearInterval(pollingInterval);
+                    pollingInterval = null;
+                }
+            }
+
+            // Cerrar modal de turno generado
+            if (closeTurnSuccessModal && turnSuccessModal) {
+                closeTurnSuccessModal.addEventListener('click', () => {
+                    turnSuccessModal.classList.remove('active');
+                    stopPolling();
+                });
+
+                turnSuccessModal.addEventListener('click', (e) => {
+                    if (e.target === turnSuccessModal) {
+                        turnSuccessModal.classList.remove('active');
+                        stopPolling();
+                    }
+                });
+            }
+
+            // Función para cancelar turno
+            async function cancelTurn(turnCode) {
+                // Limpiar el código (sin espacios)
+                const cleanCode = turnCode ? turnCode.trim().replace(/\s+/g, '') : null;
+                
+                if (!cleanCode || cleanCode === 'N/A' || cleanCode === '-') {
+                    showMessage(translations[currentLang].cancelTurnError, 'error');
+                    return;
+                }
+
+                if (!confirm(translations[currentLang].cancelTurnConfirm)) {
+                    return;
+                }
+
+                try {
+                    const cancelUrl = `https://mobile.euro.debmedia.com/api/v1/turn/${cleanCode}/cancel`;
+                    console.log('Cancelando turno:', cancelUrl);
+                    console.log('Código usado:', cleanCode);
+
+                    const res = await fetch(cancelUrl, {
+                        method: 'POST',
+                        body: "{}",
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': 'Bearer ' + API_TOKEN
+                        }
+                    });
+
+                    if (!res.ok) {
+                        let extra = '';
+                        try { extra = await res.text(); } catch (_) {}
+                        throw new Error('Error API (' + res.status + '): ' + extra);
+                    }
+
+                    // Si la respuesta es 200 OK, redirigir al formulario original
+                    if (res.status === 200 || res.ok) {
+                        // Detener el polling antes de cerrar
+                        stopPolling();
+                        
+                        showMessage(translations[currentLang].cancelTurnSuccess, 'success');
+                        
+                        // Cerrar el modal después de cancelar
+                        if (turnSuccessModal) {
+                            turnSuccessModal.classList.remove('active');
+                        }
+
+                        // Resetear el formulario y ocultar mensajes
+                        if (form) {
+                            form.reset();
+                            // Resetear reCAPTCHA
+                            if (typeof grecaptcha !== 'undefined') {
+                                grecaptcha.reset();
+                            }
+                        }
+                        hideMessage();
+
+                        // Redirigir al formulario original después de un breve delay
+                        setTimeout(() => {
+                            window.location.reload();
+                        }, 1500);
+                    }
+
+                } catch (err) {
+                    console.error('Error al cancelar turno:', err);
+                    showMessage(translations[currentLang].cancelTurnError, 'error');
+                }
+            }
+
+            // Event listener para botón de cancelar turno
+            if (cancelTurnBtn) {
+                cancelTurnBtn.addEventListener('click', () => {
+                    const turnCode = turnCodeDisplay ? turnCodeDisplay.textContent : null;
+                    cancelTurn(turnCode);
+                });
+            }
+
+            // Submit formulario
+            if (form) {
+                form.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    hideMessage();
+
+                    if (!form.checkValidity()) {
+                        form.reportValidity();
+                        return;
+                    }
+
+                    // Validar reCAPTCHA
+                    const recaptchaResponse = grecaptcha.getResponse();
+                    if (!recaptchaResponse) {
+                        showMessage(translations[currentLang].recaptchaError, 'error');
+                        return;
+                    }
+
+                    const idiomaVal   = idiomaSelect ? idiomaSelect.value : 'es';
+
+                    // Validar idioma
+                    if (!idiomaVal || (idiomaVal !== 'es' && idiomaVal !== 'en')) {
+                        showMessage(translations[currentLang].errorSelectIdioma, 'error');
+                        return;
+                    }
+
+                    // Actualizar idioma actual y traducciones
+                    if (idiomaVal !== currentLang) {
+                        switchLanguage(idiomaVal);
+                    }
+
+                    // BranchID fijo para T4S
+                    const branchId = FIXED_BRANCH_ID;
+
+                    // Determinar queueId según el idioma (T4S: español = 715, inglés = 844)
+                    const queueId = idiomaVal === 'en' ? 844 : 715;
+
+                    const nombre   = nombreInput.value.trim();
+                    const apellido = apellidoInput.value.trim();
+                    const email    = emailInput.value.trim();
+                    const codPais  = codigoPaisInput.value.trim();
+                    const tel      = telefonoInput.value.trim();
+                    const acomp    = acompanantesInput.value || '0';
+
+                    const fullPhone = codPais + tel;
+                    const firstName = (nombre + ' ' + apellido).trim(); // En Debmedia: firstName
+                    const lastName  = String(acomp);                     // En Debmedia: lastName = acompañantes
+
+                    const payload = {
+                        firstName: firstName,
+                        lastName:  lastName,
+                        email:     email,
+                        phone:     fullPhone
+                    };
+
+                    try {
+                        setLoading(true);
+
+                        const result = await createTurn(payload, queueId, branchId);
+                        console.log('Turno creado:', result);
+
+                        // Extraer información del turno de la respuesta
+                        const turnData = result.data || result;
+                        
+                        // Extraer código del turno
+                        const turnCode = turnData.code || result.code || turnData.ticketNumber || 
+                                        result.turnCode || result.ticketNumber || 
+                                        turnData.id || result.id || 
+                                        turnData.ticket || result.ticket || 
+                                        turnData.number || result.number || 
+                                        'N/A';
+
+                        // Extraer número de turno (campo "turn" de jsonDetails o directamente)
+                        const jsonDetails = turnData.jsonDetails || result.jsonDetails || {};
+                        const turn = jsonDetails.turn || turnData.turn || result.turn || '-';
+
+                        const branch = result.branch || turnData.branch || {};
+                        const branchMonitorInfo = branch.monitorInfo || {};
+                        const monitorInfo = turnData.monitorInfo || result.monitorInfo || branchMonitorInfo || {};
+
+                        // Extraer estado del turno y determinar el mensaje
+                        const turnStatus = turnData.turnStatus || result.turnStatus || 
+                                         turnData.status || result.status || 
+                                         'WAITING_TO_BE_CALLED';
+                        
+                        let statusText = '';
+                        if (turnStatus === 'ANNOUNCED' || turnStatus === 'calling' || turnStatus === 'being_called') {
+                            statusText = translations[currentLang].turnStatusCalling;
+                        } else if (turnStatus === 'WAITING_TO_BE_CALLED' || turnStatus === 'waiting') {
+                            statusText = translations[currentLang].turnStatusWaiting;
+                        } else if (turnStatus === 'FINALIZED' || turnStatus === 'finalized') {
+                            statusText = translations[currentLang].turnStatusFinalized || 'Atención finalizada';
+                        } else {
+                            statusText = translations[currentLang].turnStatusWaiting;
+                        }
+
+                        // Obtener el texto de la terminal según el idioma actual
+                        const terminalText = getTerminalText(currentLang);
+
+                        // Actualizar el modal con los datos iniciales
+                        updateTurnModal({
+                            code: turnCode,
+                            turn: turn,
+                            turnStatus: turnStatus,
+                            terminal: terminalText
+                        });
+
+                        if (turnSuccessModal) {
+                            turnSuccessModal.classList.add('active');
+                        }
+
+                        // Actualizar traducciones del modal
+                        switchLanguage(currentLang);
+
+                        // Iniciar polling para actualizar el estado del turno dinámicamente
+                        startPolling(turnCode);
+
+                    } catch (err) {
+                        console.error(err);
+                        showMessage(translations[currentLang].errorMessage, 'error');
+                    } finally {
+                        setLoading(false);
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
+
