@@ -244,16 +244,16 @@
 
             // Leer parámetro de terminal desde la URL
             const urlParams = new URLSearchParams(window.location.search);
-            const terminalParam = urlParams.get('terminal'); // Puede ser 't1' o 't4s'
+            const terminalParam = urlParams.get('terminal'); // Puede ser 't1-cibeles' o 't4s-neptuno'
             
             // Configuración de terminal según parámetro
             let fixedTerminal = null;
             let fixedBranchId = null;
             
-            if (terminalParam === 't1' || terminalParam === 'T1') {
+            if (terminalParam === 't1-cibeles' || terminalParam === 'T1-CIBELES' || terminalParam === 't1-Cibeles') {
                 fixedTerminal = 't1';
                 fixedBranchId = 76;
-            } else if (terminalParam === 't4s' || terminalParam === 'T4S' || terminalParam === 't4S') {
+            } else if (terminalParam === 't4s-neptuno' || terminalParam === 'T4S-NEPTUNO' || terminalParam === 't4s-Neptuno' || terminalParam === 'T4S-Neptuno') {
                 fixedTerminal = 't4s';
                 fixedBranchId = 71;
             }
