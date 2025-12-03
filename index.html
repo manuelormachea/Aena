@@ -37,16 +37,10 @@
                 </select>
             </div>
 
-            <!-- Nombre -->
+            <!-- Nombre y Apellido -->
             <div class="form-group">
-                <label for="nombre" data-i18n="nombre">Nombre</label>
-                <input type="text" id="nombre" name="nombre" class="form-control" required>
-            </div>
-
-            <!-- Apellido -->
-            <div class="form-group">
-                <label for="apellido" data-i18n="apellido">Apellido</label>
-                <input type="text" id="apellido" name="apellido" class="form-control" required>
+                <label for="nombreCompleto" data-i18n="nombreCompleto">Nombre y Apellido</label>
+                <input type="text" id="nombreCompleto" name="nombreCompleto" class="form-control" required>
             </div>
 
             <!-- Teléfono con código de país -->
@@ -99,11 +93,11 @@
                 </div>
             </div>
 
-            <!-- Cantidad de Pasajeros -->
+            <!-- Cantidad de Clientes -->
             <div class="form-group">
-                <label for="acompanantes" data-i18n="cantidadPersonas">Cantidad de pasajeros</label>
+                <label for="acompanantes" data-i18n="cantidadPersonas">Cantidad de clientes</label>
                 <input type="number" id="acompanantes" name="acompanantes" class="form-control" min="0" max="10" value="0" required>
-                <small class="form-help" data-i18n="helpPersonas">Número de pasajeros que desean ingresar (incluyéndote a ti)</small>
+                <small class="form-help" data-i18n="helpPersonas">Número de clientes que desean ingresar (incluyéndote a ti)</small>
             </div>
 
             <!-- Email -->
@@ -252,11 +246,10 @@
                     salaVIP: 'Sala VIP',
                     selectSala: 'Seleccione una sala',
                     salaVIPOption: 'Sala VIP',
-                    nombre: 'Nombre',
-                    apellido: 'Apellido',
+                    nombreCompleto: 'Nombre y Apellido',
                     telefono: 'Teléfono',
-                    cantidadPersonas: 'Cantidad de pasajeros',
-                    helpPersonas: 'Número de pasajeros que desean ingresar (incluyéndote a ti)',
+                    cantidadPersonas: 'Cantidad de clientes',
+                    helpPersonas: 'Número de clientes que desean ingresar (incluyéndote a ti)',
                     email: 'Email',
                     legalText: 'Al continuar se acepta el tratamiento de datos para ponerse en fila para Salas VIP Aena',
                     privacyNumia: 'Política de privacidad de Numia',
@@ -299,15 +292,14 @@
                     salaVIP: 'VIP Lounge',
                     selectSala: 'Select a lounge',
                     salaVIPOption: 'VIP Lounge',
-                    nombre: 'First Name',
-                    apellido: 'Last Name',
+                    nombreCompleto: 'Full Name',
                     telefono: 'Phone',
-                    cantidadPersonas: 'Number of Passengers',
-                    helpPersonas: 'Number of passengers who wish to enter (including yourself)',
+                    cantidadPersonas: 'Number of Clients',
+                    helpPersonas: 'Number of clients who wish to enter (including yourself)',
                     email: 'Email',
                     legalText: 'By continuing, you accept the data processing to join the queue for Aena VIP Lounges',
                     privacyNumia: 'Numia Privacy Policy',
-                    reservar: 'Reservar',
+                    reservar: 'Reserve',
                     turnGenerated: 'Turn Generated',
                     waitingMessage: 'Your turn has been queued. Waiting for confirmation...',
                     cancelar: 'Cancel',
@@ -360,6 +352,12 @@
                         }
                     }
                 });
+                
+                // Asegurar que el botón se actualice correctamente
+                const btnText = document.getElementById('btnText');
+                if (btnText && langData.reservar) {
+                    btnText.textContent = langData.reservar;
+                }
             }
 
             const form              = document.getElementById('reservationForm');
@@ -422,8 +420,7 @@
             const codigoPaisInput   = document.getElementById('codigoPais');
             const telefonoInput     = document.getElementById('telefono');
             const acompanantesInput = document.getElementById('acompanantes');
-            const nombreInput       = document.getElementById('nombre');
-            const apellidoInput     = document.getElementById('apellido');
+            const nombreCompletoInput = document.getElementById('nombreCompleto');
             const emailInput        = document.getElementById('email');
             const submitBtn         = document.getElementById('submitBtn');
             const btnText           = document.getElementById('btnText');
@@ -782,16 +779,15 @@
                         return;
                     }
 
-                    const nombre   = nombreInput.value.trim();
-                    const apellido = apellidoInput.value.trim();
+                    const nombreCompleto = nombreCompletoInput.value.trim();
                     const email    = emailInput.value.trim();
                     const codPais  = codigoPaisInput.value.trim();
                     const tel      = telefonoInput.value.trim();
                     const acomp    = acompanantesInput.value || '0';
 
                     const fullPhone = codPais + tel;
-                    const firstName = (nombre + ' ' + apellido).trim(); // En Debmedia: firstName
-                    const lastName  = String(acomp);                     // En Debmedia: lastName = acompañantes
+                    const firstName = nombreCompleto; // En Debmedia: firstName
+                    const lastName  = String(acomp);   // En Debmedia: lastName = acompañantes
 
                     const payload = {
                         firstName: firstName,
