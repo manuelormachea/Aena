@@ -96,7 +96,7 @@
             <!-- Cantidad de Clientes -->
             <div class="form-group">
                 <label for="acompanantes" data-i18n="cantidadPersonas">Cantidad de clientes</label>
-                <input type="number" id="acompanantes" name="acompanantes" class="form-control" min="0" max="10" value="0" required>
+                <input type="number" id="acompanantes" name="acompanantes" class="form-control" min="1" max="10" value="1" required>
                 <small class="form-help" data-i18n="helpPersonas">Número de clientes que desean ingresar (incluyéndote a ti)</small>
             </div>
 
@@ -108,10 +108,7 @@
 
             <!-- Políticas legales -->
             <div class="legal-links">
-                <p class="legal-text" data-i18n="legalText">Al continuar se acepta el tratamiento de datos para ponerse en fila para Salas VIP Aena</p>
-                <div class="legal-links-container">
-                    <a href="https://web.numia.co/politica-de-privacidad-de-datos?_gl=1*14hdwaa*_gcl_au*MTY0MzUzMzYyMS4xNzYxNjc1NjMx" target="_blank" class="legal-link" data-i18n="privacyNumia">Política de privacidad de Numia</a>
-                </div>
+                <p class="legal-text" data-i18n="legalText">Aena tratará tus datos para avisarte cuando haya disponibilidad en la Sala VIP y facilitar tu acceso sin colas, basado en la ejecución de contrato de compra de acceso. Puedes ejercer derechos y más información en el siguiente&nbsp;<a href="https://www.aena.es/es/nota-adicional/politica-privacidad-correos" target="_blank" rel="noopener noreferrer" class="legal-link" data-i18n="privacyLink">enlace</a>.</p>
             </div>
 
             <!-- reCAPTCHA -->
@@ -251,8 +248,8 @@
                     cantidadPersonas: 'Cantidad de clientes',
                     helpPersonas: 'Número de clientes que desean ingresar (incluyéndote a ti)',
                     email: 'Email',
-                    legalText: 'Al continuar se acepta el tratamiento de datos para ponerse en fila para Salas VIP Aena',
-                    privacyNumia: 'Política de privacidad de Numia',
+                    legalText: 'Aena tratará tus datos para avisarte cuando haya disponibilidad en la Sala VIP y facilitar tu acceso sin colas, basado en la ejecución de contrato de compra de acceso. Puedes ejercer derechos y más información en el siguiente <a href="https://www.aena.es/es/nota-adicional/politica-privacidad-correos" target="_blank" rel="noopener noreferrer" class="legal-link">enlace</a>.',
+                    privacyLink: 'enlace',
                     reservar: 'Reservar',
                     turnGenerated: 'Turno Generado',
                     waitingMessage: 'Su turno ha sido encolado. Esperando confirmación...',
@@ -297,8 +294,8 @@
                     cantidadPersonas: 'Number of Clients',
                     helpPersonas: 'Number of clients who wish to enter (including yourself)',
                     email: 'Email',
-                    legalText: 'By continuing, you accept the data processing to join the queue for Aena VIP Lounges',
-                    privacyNumia: 'Numia Privacy Policy',
+                    legalText: 'Aena will process your data to notify you when there is availability in the VIP Lounge and facilitate your access without queues, based on the execution of the access purchase contract. You can exercise your rights and find more information in the following <a href="https://www.aena.es/es/nota-adicional/politica-privacidad-correos" target="_blank" rel="noopener noreferrer" class="legal-link">link</a>.',
+                    privacyLink: 'link',
                     reservar: 'Reserve',
                     turnGenerated: 'Turn Generated',
                     waitingMessage: 'Your turn has been queued. Waiting for confirmation...',
@@ -347,6 +344,9 @@
                     if (langData[key]) {
                         if (element.tagName === 'INPUT' && element.type === 'text') {
                             element.placeholder = langData[key];
+                        } else if (key === 'legalText') {
+                            // Para el texto legal, usar innerHTML para mantener el enlace
+                            element.innerHTML = langData[key];
                         } else {
                             element.textContent = langData[key];
                         }
@@ -783,7 +783,7 @@
                     const email    = emailInput.value.trim();
                     const codPais  = codigoPaisInput.value.trim();
                     const tel      = telefonoInput.value.trim();
-                    const acomp    = acompanantesInput.value || '0';
+                    const acomp    = acompanantesInput.value || '1';
 
                     const fullPhone = codPais + tel;
                     const firstName = nombreCompleto; // En Debmedia: firstName
